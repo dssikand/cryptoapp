@@ -37,8 +37,8 @@ export default function SignInPassphraseStep({
 
         <TouchableOpacity
           style={[styles.button, !value && styles.buttonDisabled]}
-          onPress={onSignIn}
-          disabled={!value || loading}
+          // onPress={onSignIn}
+          onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Wallet"}}})}
         >
           {loading ? <ActivityIndicator color="#FFF" /> : <Text style={styles.buttonText}>Passphrase Sign In</Text>}
         </TouchableOpacity>
