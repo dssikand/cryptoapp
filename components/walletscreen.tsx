@@ -151,7 +151,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     alignItems: "center",
-    marginTop: 10,
   },
   activity: {
     flexDirection: "row",
@@ -173,7 +172,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   amountText: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "500",
     color: "#fff",
   },

@@ -25,7 +25,7 @@ import Navbar from './common/navbar';
 import { Copy, SquareCheck } from 'lucide-react-native';
 
 const MiningScreen = () => {
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   const [seeMoreVisible, setSeeMoreVisible] = useState(false);
   const openLink = () => {
     Linking.openURL('https://www.qoyn.network/mining.html?prefix=7kunusxk16');
@@ -142,8 +142,8 @@ const MiningScreen = () => {
         <View style={styles.buttonContainer}>
           <Animated.View
             style={[styles.buttonContainer, {transform: [{translateY}]}]}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText} onPress={toggleModal}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Objective")}>
+              <Text style={styles.buttonText} >
                 Continue
               </Text>
             </TouchableOpacity>
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     width: responsiveWidth(100),
-    height: responsiveHeight(90),
+    height: responsiveHeight(100),
   },
   referralCodeContainer: {
     flexDirection: "row",

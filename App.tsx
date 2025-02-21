@@ -18,6 +18,7 @@ import AnnouncemntScreen from './components/announcementscree';
 import SettingScreen from './components/settingscreen';
 import ReferalCode from './components/referalcode';
 import CustomDrawer from './components/common/customdrawer';
+import ObjectiveScreen from './components/objectivescreen';
 
 // Create Navigators
 const Stack = createStackNavigator();
@@ -78,6 +79,8 @@ function MainStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MainTabs" component={BottomTabs} />
+      <Stack.Screen name="Objective" component={ObjectiveScreen} />
+
     </Stack.Navigator>
   );
 }
@@ -95,7 +98,7 @@ function DrawerNavigator() {
           headerShown: false, // Hide header
         }}>
       <Drawer.Screen name="Home" component={MainStack} />
-      {/* <Drawer.Screen name="Leaderboard" component={LeaderboardScreen} /> */}
+      <Drawer.Screen name="Objective" component={ObjectiveScreen} />
     </Drawer.Navigator>
   );
 }

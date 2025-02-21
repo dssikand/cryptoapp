@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderBottomWidth: 4,
     borderColor: "transparent",
+    textAlign:"center"
   },
   activeButton: {
     borderColor: "#FF7F00",
@@ -165,8 +166,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "#999",
-    textAlign:"left",
-    width:responsiveWidth(50)
+    textAlign:"center",
+    width:responsiveWidth(40)
   },
   activeButtonText: {
     color: "#FF7F00",

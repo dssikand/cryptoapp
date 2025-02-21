@@ -86,13 +86,13 @@ const styles = StyleSheet.create({
   orangebox: {
     backgroundColor: "#d9480f",
     borderRadius: 100, // Circular shape
-    width: responsiveWidth(38),
-    height: responsiveHeight(17),
+    width: responsiveWidth(50),
+    height: responsiveHeight(22.3),
     justifyContent: "center",
     alignItems: "center",
   },
   title: {
-    fontSize: 40,
+    fontSize: 46,
     fontWeight: "bold",
     textAlign: "center",
     color: "#fff",
