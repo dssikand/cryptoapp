@@ -1,21 +1,35 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Pressable, ImageBackground, Animated, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  ImageBackground,
+  Animated,
+  FlatList,
+  Platform,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
 import Navbar from './common/navbar';
 
 const leaderboardData = [
-  { id: '1', rank: 1, username: 'backy6666', coins: '25.20' },
-  { id: '2', rank: 2, username: 'cryptoKing', coins: '18.75' },
-  { id: '3', rank: 3, username: 'minerPro', coins: '15.40' },
-  { id: '4', rank: 4, username: 'blockchainDude', coins: '12.00' },
-  { id: '5', rank: 5, username: 'Satoshi', coins: '10.50' },
-  { id: '6', rank: 6, username: 'BitLover', coins: '9.25' },
-  { id: '7', rank: 7, username: 'HashMaster', coins: '8.80' },
+  {id: '1', rank: 1, username: 'backy6666', coins: '25.20'},
+  {id: '2', rank: 2, username: 'cryptoKing', coins: '18.75'},
+  {id: '3', rank: 3, username: 'minerPro', coins: '15.40'},
+  {id: '4', rank: 4, username: 'blockchainDude', coins: '12.00'},
+  {id: '5', rank: 5, username: 'Satoshi', coins: '10.50'},
+  {id: '6', rank: 6, username: 'BitLover', coins: '9.25'},
+  {id: '7', rank: 7, username: 'HashMaster', coins: '8.80'},
 ];
 
 const LeaderboardScreen = () => {
-  const animations = useRef(leaderboardData.map(() => new Animated.Value(0))).current;
+  const animations = useRef(
+    leaderboardData.map(() => new Animated.Value(0)),
+  ).current;
 
   useEffect(() => {
     animations.forEach((anim, index) => {
@@ -28,7 +42,7 @@ const LeaderboardScreen = () => {
     });
   }, []);
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     return (
       <Animated.View
         style={[
@@ -44,30 +58,42 @@ const LeaderboardScreen = () => {
               },
             ],
           },
-        ]}
-      >
+        ]}>
         <Pressable>
-          {({ pressed }) => (
+          {({pressed}) => (
             <LinearGradient
-              colors={pressed ? ['#1a1b1e', '#E03000'] : ['#1a1b1e', '#1a1b1e80']}
-              style={styles.card}
-            >
-              <View style={styles.rankContainer}>
-                <Text style={styles.rankText}>Rank</Text>
-                <LinearGradient colors={['#F06400', '#FFBF6E']} style={styles.rankCircle}>
-                  <Text style={styles.numberText}>{item.rank}</Text>
-                </LinearGradient>
-              </View>
-              <View style={styles.userContainer}>
-                <Text style={styles.username}>User</Text>
-                <Text style={styles.coins}>{item.username}</Text>
-              </View>
-              <View style={styles.userContainer}>
-                <Text style={styles.username}>Total Coins</Text>
-                <Text style={styles.coins}>
-                  {item.coins}
-                  <Text style={styles.coinsDecimal}>.00</Text>
-                </Text>
+              colors={
+                pressed ? ['#1a1b1e', '#E03000'] : ['#1a1b1e', '#1a1b1e80']
+              }
+              style={styles.card}>
+              <View
+                style={{
+                  padding: Platform.OS == 'ios' ? 10 : 0,
+                }}>
+                <View style={styles.rankContainer}>
+                  <Text style={styles.rankText}>Rank</Text>
+                  <View
+                    style={{
+                      padding: 10,
+                    }}>
+                    <LinearGradient
+                      colors={['#F06400', '#FFBF6E']}
+                      style={styles.rankCircle}>
+                      <Text style={styles.numberText}>{item.rank}</Text>
+                    </LinearGradient>
+                  </View>
+                </View>
+                <View style={styles.userContainer}>
+                  <Text style={styles.username}>User</Text>
+                  <Text style={styles.coins}>{item.username}</Text>
+                </View>
+                <View style={styles.userContainer}>
+                  <Text style={styles.username}>Total Coins</Text>
+                  <Text style={styles.coins}>
+                    {item.coins}
+                    <Text style={styles.coinsDecimal}>.00</Text>
+                  </Text>
+                </View>
               </View>
             </LinearGradient>
           )}
@@ -79,16 +105,19 @@ const LeaderboardScreen = () => {
   return (
     <>
       <Navbar />
-      <ImageBackground source={require("../assets/img/crypt.jpeg")} style={styles.background} resizeMode="cover">
+      <ImageBackground
+        source={require('../assets/img/crypt.jpeg')}
+        style={styles.background}
+        resizeMode="cover">
         <Text style={styles.Toptext}>LeaderBoard</Text>
 
         {/* Ensuring Full-Height View for FlatList */}
         <View style={styles.bg}>
           <FlatList
             data={leaderboardData}
-            keyExtractor={(item) => item.id}
+            keyExtractor={item => item.id}
             renderItem={renderItem}
-            showsVerticalScrollIndicator={true}  // Enable vertical scrolling indicator
+            showsVerticalScrollIndicator={true} // Enable vertical scrolling indicator
           />
         </View>
       </ImageBackground>
@@ -101,15 +130,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     height: responsiveHeight(100),
-
   },
   Toptext: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 22,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 80,
     marginBottom: 20,
-    textAlign: "center",
+    textAlign: 'center',
   },
   background: {
     flex: 1,
@@ -121,9 +149,10 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: 8,
-    padding: 16,
+    padding: Platform.OS == 'ios' ? 0 : 16,
     borderWidth: 1,
     borderColor: '#E03000',
+    overflow: 'hidden',
   },
   rankContainer: {
     height: 32,
@@ -131,6 +160,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
+    margin: Platform.OS == 'ios' ? 10 : 0,
   },
   userContainer: {
     height: 32,

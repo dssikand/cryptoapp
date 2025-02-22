@@ -1,6 +1,6 @@
 import { Info } from "lucide-react-native";
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView , Image} from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView , Image, Platform} from "react-native";
 import { responsiveWidth } from "react-native-responsive-dimensions";
 import Svg, { Path } from "react-native-svg";
 const SettingScreen = () => {
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 22,
     fontWeight: "bold",
-    marginTop: 20,
+    marginTop: Platform.OS == "ios" ? 45: 20,
     marginBottom: 30,
     textAlign: "center",
   },

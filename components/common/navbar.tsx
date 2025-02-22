@@ -1,8 +1,11 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-import { Menu, CircleUserRound } from 'lucide-react-native';
-import { useNavigation } from '@react-navigation/native';
+import {View, TouchableOpacity, StyleSheet, Platform} from 'react-native';
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
+import {Menu, CircleUserRound} from 'lucide-react-native';
+import {useNavigation} from '@react-navigation/native';
 
 const Navbar = () => {
   const navigation = useNavigation();
@@ -10,7 +13,9 @@ const Navbar = () => {
   return (
     <View style={styles.navbar}>
       {/* Left: Hamburger Icon */}
-      <TouchableOpacity style={styles.iconButton} onPress={() => navigation.openDrawer()}>
+      <TouchableOpacity
+        style={styles.iconButton}
+        onPress={() => navigation.openDrawer()}>
         <Menu color="white" size={30} />
       </TouchableOpacity>
 
@@ -34,7 +39,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: responsiveWidth(5),
-    paddingTop: responsiveHeight(2),
+    paddingTop:
+      Platform.OS == 'ios' ? responsiveHeight(10) : responsiveHeight(2),
     zIndex: 100,
   },
   iconButton: {
