@@ -23,7 +23,8 @@ import CanvasQ from './common/canvasq';
 import {useNavigation} from '@react-navigation/native';
 import Navbar from './common/navbar';
 import { Copy, SquareCheck } from 'lucide-react-native';
-
+import { useQuery } from '@tanstack/react-query';
+import { ActiveUser, CurrentUser } from '../services/user.services';
 const MiningScreen = () => {
   const navigation = useNavigation();
   const [seeMoreVisible, setSeeMoreVisible] = useState(false);
@@ -35,7 +36,15 @@ const MiningScreen = () => {
     setModalVisible(!modalVisible);
   };
   const outerContentTranslateY = useRef(new Animated.Value(-100)).current; // Start above screen
-
+  const {data, isLoading} = useQuery({
+    queryFn: CurrentUser,
+    queryKey:['CURRENT_USER']
+  }) 
+  const referalcode=!isLoading ? data.data.referralCode :''
+  const totalvalue= !isLoading ? data?.data?.totalValue?.referralBonus + data?.data?.totalValue?.referralsMiningCodeSum + data?.data?.totalValue?.userMiningCodeSum :0
+  console.log(totalvalue);
+  
+  
   useEffect(() => {
     // Animate the outer content from top to its position
     Animated.timing(outerContentTranslateY, {
@@ -55,6 +64,9 @@ const MiningScreen = () => {
       useNativeDriver: true,
     }).start();
   }, []);
+  if(!isLoading){
+    console.log(data.data,"data")
+  }
   return (
     <ImageBackground
       source={require('../assets/img/crypt.jpeg')} // Change to your image path
@@ -80,7 +92,7 @@ const MiningScreen = () => {
           
           <Text style={styles.referralText}>Referral Code</Text>
           <View style={styles.referralCodeContainer}>
-              <Text style={styles.referralCode}>q815fi4fap <Copy color={"white"} size={20} style={styles.iconcopy}/></Text>
+              <Text style={styles.referralCode}>{referalcode} <Copy color={"white"} size={20} style={styles.iconcopy}/></Text>
              
             </View>
           <View style={styles.codeContainer}>

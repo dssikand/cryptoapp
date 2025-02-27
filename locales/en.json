@@ -1,0 +1,382 @@
+{
+    "Home": {
+      "title": "Hi there",
+      "heroTitle": "The cryptocurrency for everyone.",
+      "statistic": {
+        "maxSupply": "Max Supply:",
+        "totalMined": "Mined:",
+        "totalMiners": "Total Miners:",
+        "100M": "100 Million QYN"
+      },
+      "startMining": "Start Mining",
+      "whyQoyn": "Why Qoyn",
+      "whatIsQoyn": "What is Qoyn?",
+      "qoynDescription1": "A revolutionary cryptocurrency being built on the foundation of Bitcoin, reimagined for the modern digital world.",
+      "qoynDescription2": "aims to address the key limitations of Bitcoin by fostering inclusivity, transitioning to an eco-friendly proof-of-stake protocol, and significantly enhancing transaction speeds with block times as short as a few seconds. Designed to be accessible, sustainable, and efficient, Qoyn strives to empower a broader community while driving the next evolution of blockchain technology.",
+  
+      "network": {
+        "title": "Join the Qoyn Network.",
+        "subtitle": "Start mining and connect to others.",
+        "step1": {
+          "number": "01",
+          "title": "Create Your Free Account",
+          "description": "Takes less than a minute."
+        },
+        "step2": {
+          "number": "02",
+          "title": "Start Mining Qoyn",
+          "description": "You can mine right from your browser."
+        }
+      },
+  
+      "roadmap": {
+        "title": "Our Roadmap.",
+        "subtitle": "The journey ahead for Qoyn and our community",
+        "phase1": {
+          "title": "Phase 1",
+          "heading": "Network Building & Community Growth",
+          "date": "January 1st, 2025",
+          "description": "In this first phase, we focus on laying the foundation for a truly inclusive cryptocurrency. It's all about building the community and reaching consensus on key decisions and ideas that will shape the future of the network. Everyone has a voice, and together we'll decide how things move forward. During this phase, users will also begin mining coins, with an easy and accessible process that lets anyone get involved. It's the perfect time to start building relationships, contributing to the community, and being part of a project that's all about collaboration and growth."
+        },
+        "more": "More..."
+      },
+  
+      "tokenomics": {
+        "title": "Tokenomics",
+        "totalSupply": "Total Supply: 1,000,000,000 QOYN",
+        "distribution": {
+          "mining": {
+            "title": "Browser Based Mining (pre-launch)",
+            "value": "40",
+            "description": "Initial distribution through browser-based mining, ensuring fair launch and wide distribution."
+          },
+          "rewards": {
+            "title": "Main Net Block Rewards",
+            "value": "52",
+            "description": "Ongoing mining rewards distributed to network participants maintaining the blockchain."
+          },
+          "liquidity": {
+            "title": "Liquidity",
+            "value": "5",
+            "description": "Reserved for initial liquidity provision and market stability."
+          },
+          "team": {
+            "title": "Qoyn Network Core Team",
+            "value": "3",
+            "description": "Allocated to the core team for continued development and maintenance."
+          }
+        }
+      }
+    },
+    "Common": {
+      "home": "Home",
+      "group": "Group",
+      "wallet": "Wallet",
+      "leader": "Leader Board",
+      "leader board des": "See who's leading the charge in mining – join the ranks of top miners",
+      "proof of work": "Proof Of Work",
+      "mining": "Mining",
+      "announcement": "Announcement",
+      "settings": "Settings",
+      "privacy-policy": "Privacy Policy",
+      "terms-and-condition": "Terms and Condition",
+      "signIn": "Sign in",
+      "login": "Login",
+      "signUp": "Sign up",
+      "logout": "Logout",
+      "googleSignIn": "Sign in with Google",
+      "facebookSignIn": "Sign in with Facebook",
+      "appleSignIn": "Sign in with Apple",
+      "linkedInSignIn": "Sign in with LinkedIn",
+      "terms&privacy": "By clicking Sign up, Sign in with Apple. Sign in with Google. Continue with Facebook. Sign in with LinkedIn, you agree to terms & condition and privacy policy.",
+      "coins": "Coins",
+      "Account": "My Account",
+      "miningPool": "Mining Pool",
+      "about": "About",
+      "faq": "FAQ",
+      "whitepaper": "Whitepaper",
+      "terms": "Terms of Service",
+      "privacy": "Privacy Policy",
+      "and": "and",
+      "send": "Send",
+      "submit": "Submit",
+      "verify": "Verify Your Telegram Account",
+      "verifyDes": "To get verification code please go to our Telegram bot @blockchain_online_pro_bot and send /start or click the link below:",
+      "openTelegramBot": "Open Telegram Bot",
+      "referralCode": "Referral Code",
+      "continue": "Continue",
+      "yourBalance": "Your balance",
+      "platinum": "Platinum",
+      "gold": "Gold",
+      "silver": "Silver",
+      "bronze": "Bronze"
+    },
+    "Auth": {
+      "signIn": "Sign In",
+      "signUp": "Sign Up",
+      "signInViaTelegram": "Sign-in via Telegram",
+      "signUpViaTelegram": "Sign-up via Telegram",
+      "enterLoginCode": "Enter login code",
+      "newUserSignUp": "New User Sign Up",
+      "signInStep1": {
+        "title": "Open Telegram",
+        "description": "Open the Telegram app on your phone or computer."
+      },
+      "signInStep2": {
+        "title": "Request Login Code",
+        "description1": "Open our bot",
+        "description2": "Request a login code from the menu.",
+        "description3": "Enter login code above"
+      },
+      "signUpStep1": {
+        "title": "Open Telegram",
+        "description": "Open the Telegram app on your phone or computer."
+      },
+      "signUpStep2": {
+        "title": "Start bot to receive code",
+        "description1": "Search for",
+        "description2": "Start the bot to get your login code.",
+        "description3": "Enter login code above"
+      },
+      "needHelp": "Need help? Watch our login tutorial",
+      "newUser?": "New user?",
+      "createYourQoynAccount": "Create your Qoyn Account",
+      "alreadyHaveAccount": "Already have an account?",
+      "welcomeBack": "Welcome back",
+      "passphraseSignIn": "Passphrase Sign-In",
+      "or": "OR",
+      "telegramSignIn": "Telegram Sign-In",
+      "enterPassphrase": "Enter your passphrase to sign in to your account.",
+      "createPassphraseSignIn": "Create new account",
+      "signInStep1": {
+        "title": "Step 1",
+        "description": "Open Telegram and search for BotFather"
+      },
+      "signInStep2": {
+        "title": "Step 2",
+        "description1": "Search for",
+        "description2": "Follow the instructions to get your verification code",
+        "description3": "Enter the verification code here to sign in"
+      },
+      "needHelp": "Need help?",
+      "createNewAccount": "Create a new account",
+      "passphraseSignUp": "Passphrase Sign-Up",
+      "telegramSignUp": "Telegram Sign-Up",
+      "signInWithPassphrase": "Sign in with passphrase",
+      "signUpStep1": {
+        "title": "Step 1",
+        "description": "Create your account with a secure passphrase"
+      },
+      "signUpStep2": {
+        "title": "Step 2",
+        "description1": "Open Telegram and search for",
+        "description2": "Create a new bot",
+        "description3": "Copy the bot token and paste it here"
+      },
+      "needHelp": "Need help?",
+      "passphraseGenerator": {
+        "neverShare": "Never share your secret passphrase with anyone and store it safely.",
+        "copyAllWords": "Copy all words",
+        "copied": "Copied to clipboard!",
+        "continue": "Continue",
+        "selectLanguage": "Select Language"
+      },
+      "confirmationModal": {
+        "title": "Important Security Notice",
+        "description1": "Have you safely stored your passphrase?",
+        "description2": "You will need it to access your account.",
+        "warning": "If you lose your passphrase, you will permanently lose access to your account.",
+        "yes": "Yes",
+        "no": "No"
+      }
+    },
+    "About": {
+      "content": "About Page"
+    },
+    "Announcement": {
+      "title": "Announcement"
+    },
+    "Account": {
+      "welcome": "Welcome",
+      "referrals": "Referrals",
+      "name": "Name",
+      "email": "Email",
+      "birthday": "Birthday",
+      "phone": "Phone",
+      "countryCode": "Country Code",
+      "country": "Country of Residence",
+      "referralCode": "Referral Code",
+      "total": "Total",
+      "skip": "Skip",
+      "enterReferralCode": {
+        "intro1": "Enter the",
+        "intro2": "referral code",
+        "intro3": "of the person who referred you."
+      },
+      "signUpByReferral": {
+        "intro1": "Sign up by referral entitles you to a",
+        "intro2": "20 Qoyn instant bonus"
+      },
+      "namePlaceholder": "Enter your name",
+      "lastly": "And lastly, your name.",
+      "submitCode": "Submit Code",
+      "submit": "Submit",
+      "placeholderEnterReferralCode": "Enter referral code",
+      "registerIntro": "Your gateway to the most advanced Layer 1 Blockchain",
+      "registerIntro2": "Register with Referral Code to get 500 coins",
+      "referredByLabel": "Please enter the referral code",
+      "nameLabel": "Enter Your Name",
+      "phoneLabel": "Enter Your Phone Number",
+      "countryLabel": "Select Your Country of Residence",
+      "accountInfo": "Account Info",
+      "recoveryPassword": "Recovery Password",
+      "recoveryPasswordDesc": "Use your recovery password to load your account on new devices.",
+      "recoveryPasswordCopied": "Recovery password copied to clipboard",
+      "recoveryPasswordHidden": "Recovery password hidden",
+      "recoveryPasswordHiddenTitle": "Recovery Password Hidden",
+      "recoveryPasswordHiddenDesc": "Your recovery password has been hidden on this device.",
+      "hideRecoveryPassword": "Hide Recovery Password",
+      "hideRecoveryPasswordDesc": "Permanently hide your recovery password on this device.",
+      "permanently": "Permanently",
+      "hideRecoveryWarning": "Without your recovery password, you cannot load your account on new devices.",
+      "hideRecoveryRecommendation": "We strongly recommend you save your recovery password in a safe and secure place before continuing.",
+      "copy": "Copy",
+      "viewQR": "View QR",
+      "hide": "Hide",
+      "deleteAccount": "Delete Account",
+      "save": "Save",
+      "confirm": "Confirm",
+      "continue": "Continue",
+      "cancel": "Cancel"
+    },
+    "LeaderBoard": {
+      "No": "No.",
+      "referralCode": "Referral Code",
+      "coins": "Coins",
+      "rank": "Rank",
+      "user": "User",
+      "totalCoins": "Total Coins"
+    },
+    "ProofOfWork": {
+      "hidden": "Hidden",
+      "getSuffix": "Get Suffix",
+      "getNewSuffix": "Get New Suffix",
+      "submit": "Submit",
+      "objective": "Objective"
+    },
+    "Mining": {
+      "add": "Add",
+      "mining": "Mining",
+      "nextMining": "Next mining session starts in",
+      "lastMining": "Last mining code"
+    },
+    "MiningSession": {
+      "objective": {
+        "title": "Objective",
+        "description": "Find a string that produces a SHA256 hash starting with",
+        "leadingZeros": "3 leading zeros"
+      },
+      "seeMore": "See more",
+      "seeLess": "See less",
+      "conditions": {
+        "title": "Conditions",
+        "sub1": {
+          "title": "Allowed Characters",
+          "description": "A–Z, a–z, 0–9"
+        },
+        "sub2": {
+          "title": "Max Length",
+          "description": "70 characters"
+        },
+        "sub3": {
+          "title": "Prefix"
+        },
+        "sub4": {
+          "title": "Suffix"
+        }
+      },
+      "yourTask": "Your task is to generate a valid string that meets these criteria. 🚀",
+      "reward": "Reward",
+      "goodLuck": "Good luck mining Qoyn!",
+      "needHelp": "Need help? Use our",
+      "miner": "miner.",
+      "enterSolution": "Enter your solution",
+      "submit": "Submit"
+    },
+    "Wallet": {
+      "title": "Mined Coins Details",
+      "totalMined": "Total MinedCoins",
+      "minedCoins": "Mined Coins",
+      "registerBonus": "Sign up by referral (bonus)",
+      "referralsBonus": "Referral pool (10%)",
+      "myWallet": "My Wallet",
+      "yourBalance": "Your balance",
+      "yourReferralCode": "Your Referral Code",
+      "activity": "Activity",
+      "amount": "Amount"
+    },
+    "Group": {
+      "referralCode": "Referral Code",
+      "lastMingTime": "Last Mining",
+      "status": "Status"
+    },
+    "Faq": {
+      "title": "Frequently Asked Questions",
+      "faq1Question": "What is cryptocurrency?",
+      "faq1Answer": "Cryptocurrency is a type of digital or virtual currency that uses cryptography for security. Unlike traditional currencies, such as the dollar or euro, cryptocurrencies are typically decentralized and operate on a technology called blockchain. A blockchain is a distributed ledger that records all transactions across a network of computers in a secure and transparent manner.",
+  
+      "faq2Question": "What is a smart contract in blockchain?",
+      "faq2Answer": "A smart contract is a self-executing program stored on the blockchain that automatically enforces the terms of a contract when predefined conditions are met. These contracts eliminate the need for intermediaries, reduce transaction costs, and increase transparency. Smart contracts are commonly used for financial transactions, supply chain tracking, and digital identity verification.",
+  
+      "faq3Question": "How can blockchain be used outside of cryptocurrencies?",
+      "faq3Answer": "Blockchain has a wide range of applications beyond cryptocurrencies. It can be used for supply chain management, tracking goods from origin to destination with transparency. It also supports digital identity verification, secure data sharing in healthcare, real estate transactions, and voting systems. The key benefits are increased transparency, enhanced security, and the elimination of intermediaries.",
+  
+      "faq4Question": "What is blockchain technology?",
+      "faq4Answer": "Blockchain technology is a decentralized digital ledger that records transactions across a network of computers. It is secure, transparent, and immutable, meaning that once data is recorded, it cannot be altered. Each transaction is stored in a block, and these blocks are linked together in a chronological chain, hence the name blockchain."
+    },
+    "Error": {
+      "description": "<p>We've unfortunately encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p>",
+      "title": "Something went wrong!"
+    },
+    "IndexPage": {
+      "description": "This is a basic example that demonstrates the usage of <code>next-intl</code> with the Next.js App Router. Try changing the locale in the top right corner and see how the content changes.",
+      "title": "Qoyn"
+    },
+    "LocaleLayout": {
+      "title": "Qoyn"
+    },
+    "LocaleSwitcher": {
+      "label": "Change language",
+      "locale": "{locale, select, de {🇩🇪 Deutsch} en {🇺🇸 English} other {Unknown}}"
+    },
+    "Manifest": {
+      "name": "Qoyn"
+    },
+    "Navigation": {
+      "home": "Home",
+      "pathnames": "Pathnames"
+    },
+    "NotFoundPage": {
+      "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
+      "title": "Page not found"
+    },
+    "PageLayout": {
+      "links": {
+        "docs": {
+          "description": "Learn more about next-intl in the official docs.",
+          "href": "https://next-intl-docs.vercel.app/",
+          "title": "Docs"
+        },
+        "source": {
+          "description": "Browse the source code of this example on GitHub.",
+          "href": "https://github.com/amannn/next-intl/tree/main/examples/example-app-router",
+          "title": "Source code"
+        }
+      }
+    },
+    "PathnamesPage": {
+      "description": "<p>The pathnames are internationalized too.</p><p>If you're using the default language English, you'll see <code>/en/pathnames</code> in the browser address bar on this page.</p><p>If you change the locale to German, the URL is localized accordingly (<code>/de/pfadnamen</code>).</p>",
+      "title": "Pathnames"
+    }
+  }
+  

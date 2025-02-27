@@ -1,0 +1,325 @@
+{
+  "Home": {
+    "title": "你好",
+    "heroTitle": "人人都能使用的加密货币",
+    "statistic": {
+      "maxSupply": "最大供应量：",
+      "totalMined": "已挖矿：",
+      "totalMiners": "总挖矿者：",
+      "100M": "100百万 QYN"
+    },
+    "startMining": "开始挖矿",
+    "whyQoyn": "为什么选择Qoyn",
+    "whatIsQoyn": "什么是Qoyn？",
+    "qoynDescription1": "一个建立在比特币基础上的革命性加密货币，为现代数字世界重新构想。",
+    "qoynDescription2": "旨在通过促进包容性、过渡到环保的权益证明协议，以及将区块时间缩短至几秒钟来显著提高交易速度，从而解决比特币的主要局限性。Qoyn致力于让加密货币变得更易访问、可持续和高效，同时推动区块链技术的下一次进化，赋能更广泛的社区。",
+
+    "network": {
+      "title": "加入Qoyn网络",
+      "subtitle": "开始挖矿并与他人连接",
+      "step1": {
+        "number": "01",
+        "title": "创建免费账户",
+        "description": "注册不到一分钟"
+      },
+      "step2": {
+        "number": "02",
+        "title": "开始挖掘Qoyn",
+        "description": "您可以直接在浏览器中挖矿"
+      }
+    },
+
+    "roadmap": {
+      "title": "我们的路线图",
+      "subtitle": "Qoyn和我们社区的未来之路",
+      "phase1": {
+        "title": "第一阶段",
+        "heading": "网络建设与社区发展",
+        "date": "2025年1月1日",
+        "description": "在第一阶段，我们专注于为真正包容的加密货币奠定基础。这一切都是关于建立社区，并就将塑造网络未来的关键决策和想法达成共识。每个人都有发言权，我们将共同决定事情如何向前发展。在此阶段，用户还将开始挖掘代币，通过简单易行的流程让任何人都能参与其中。这是建立关系、为社区做出贡献并成为这个注重协作和成长项目的一部分的最佳时机。"
+      },
+      "more": "更多..."
+    },
+
+    "tokenomics": {
+      "title": "代币经济学",
+      "totalSupply": "总供应量：1,000,000,000 QOYN",
+      "distribution": {
+        "mining": {
+          "title": "浏览器挖矿（预发布）",
+          "value": "40",
+          "description": "通过浏览器挖矿进行初始分配，确保公平发布和广泛分配"
+        },
+        "rewards": {
+          "title": "主网区块奖励",
+          "value": "52",
+          "description": "持续向维护区块链的网络参与者分配挖矿奖励"
+        },
+        "liquidity": {
+          "title": "流动性",
+          "value": "5",
+          "description": "为初始流动性供应和市场稳定性预留"
+        },
+        "team": {
+          "title": "Qoyn网络核心团队",
+          "value": "3",
+          "description": "分配给核心团队用于持续开发和维护"
+        }
+      }
+    }
+  },
+  "Common": {
+    "home": "首页",
+    "group": "我的推荐组",
+    "wallet": "钱包",
+    "leader": "排行榜",
+    "leader board des": "看看谁在挖矿 – 加入顶级矿工的行列",
+    "proof of work": "验证",
+    "mining": "挖矿",
+    "announcement": "公告",
+    "settings": "设置",
+    "signIn": "登录",
+    "privacy-policy": "隐私政策",
+    "terms-and-condition": "服务条款",
+    "login": "登录",
+    "signUp": "注册",
+    "logout": "退出",
+    "googleSignIn": "使用Google登录",
+    "facebookSignIn": "使用Facebook登录",
+    "appleSignIn": "使用Apple登录",
+    "linkedInSignIn": "使用LinkedIn登录",
+    "terms&privacy": "点击注册、使用Apple、Google、Facebook、或LinkedIn 登录，即表示您同意条款和隐私政策",
+    "coins": "币",
+    "Account": "我的账户",
+    "miningPool": "矿池",
+    "about": "关于",
+    "faq": "常见问题",
+    "whitepaper": "白皮书",
+    "terms": "服务条款",
+    "privacy": "隐私政策",
+    "and": "和",
+    "send": "发送",
+    "submit": "提交",
+    "verify": "验证您的Telegram账户",
+    "verifyDes": "请添加我们的Telegram机器人@blockchain_online_pro_bot获得OTP或点击下方链接：",
+    "openTelegramBot": "点击跳转到Telegram机器人",
+    "referralCode": "推荐码",
+    "continue": "继续",
+    "yourBalance": "累计矿币",
+    "platinum": "铂金",
+    "gold": "金",
+    "silver": "银",
+    "bronze": "铜"
+  },
+  "Auth": {
+    "signIn": "登录",
+    "signUp": "注册",
+    "signInViaTelegram": "使用Telegram登录",
+    "signUpViaTelegram": "使用Telegram注册",
+    "enterLoginCode": "输入登录码",
+    "newUserSignUp": "新用户注册",
+    "signInStep1": {
+      "title": "打开Telegram",
+      "description": "在您的手机或电脑上打开Telegram应用"
+    },
+    "signInStep2": {
+      "title": "请求登录码",
+      "description1": "打开我们的机器人",
+      "description2": "从菜单中请求登录码",
+      "description3": "在上方输入登录码"
+    },
+    "signUpStep1": {
+      "title": "第一步",
+      "description": "使用安全的密码短语创建您的账户"
+    },
+    "signUpStep2": {
+      "title": "第二步",
+      "description1": "打开Telegram并搜索",
+      "description2": "创建新机器人",
+      "description3": "复制机器人令牌并粘贴到此处"
+    },
+    "needHelp": "需要帮助？",
+    "newUser?": "新用户？",
+    "createYourQoynAccount": "创建您的Qoyn账户",
+    "alreadyHaveAccount": "已有账户？",
+    "welcomeBack": "欢迎回来",
+    "passphraseSignIn": "密码短语登录",
+    "or": "或者",
+    "telegramSignIn": "Telegram登录",
+    "enterPassphrase": "输入您的密码短语以登录您的账户。",
+    "createPassphraseSignIn": "创建密码短语登录",
+    "signInStep1": {
+      "title": "第一步",
+      "description": "打开Telegram并搜索BotFather"
+    },
+    "signInStep2": {
+      "title": "第二步",
+      "description1": "搜索",
+      "description2": "按照说明获取验证码",
+      "description3": "在此输入验证码以登录"
+    },
+    "needHelp": "需要帮助？",
+    "createNewAccount": "创建新账户",
+    "passphraseSignUp": "密码短语注册",
+    "telegramSignUp": "Telegram注册",
+    "signInWithPassphrase": "使用密码短语登录",
+    "passphraseGenerator": {
+      "neverShare": "切勿与任何人分享您的密码短语，请安全保存。",
+      "copyAllWords": "复制所有单词",
+      "copied": "已复制到剪贴板！",
+      "continue": "继续",
+      "selectLanguage": "选择语言"
+    },
+    "confirmationModal": {
+      "title": "重要安全提示",
+      "description1": "您是否已安全保存密码短语？",
+      "description2": "您需要它来访问您的账户。",
+      "warning": "如果您丢失密码短语，您将永久失去对账户的访问权限。",
+      "yes": "是的",
+      "no": "不"
+    }
+  },
+  "About": {
+    "content": "你好"
+  },
+  "Announcement": {
+    "title": "公告"
+  },
+  "Account": {
+    "welcome": "欢迎",
+    "referrals": "我的推荐人",
+    "name": "名字",
+    "email": "邮箱",
+    "birthday": "生日",
+    "phone": "电话",
+    "countryCode": "国家代码",
+    "country": "居住地",
+    "referralCode": "推荐码",
+    "total": "总共",
+    "skip": "跳过",
+    "enterReferralCode": {
+      "intro1": "输入您",
+      "intro2": "推荐人",
+      "intro3": "的推荐码"
+    },
+    "signUpByReferral": {
+      "intro1": "使用推荐人的推荐码注册，您将获得",
+      "intro2": "20 Qoyn"
+    },
+    "namePlaceholder": "输入您的名字",
+    "lastly": "最后，您的名字。",
+    "submitCode": "提交推荐吗",
+    "submit": "提交",
+    "placeholderEnterReferralCode": "输入推荐码",
+    "registerIntro": "注册最先进的Blockchain客户端",
+    "registerIntro2": "使用推荐代码获得500个硬币",
+    "referredByLabel": "输入您的推荐码",
+    "nameLabel": "输入您的名字",
+    "phoneLabel": "输入您的电话",
+    "countryLabel": "选择您的居住地",
+    "accountInfo": "账户信息",
+    "recoveryPassword": "恢复密码",
+    "recoveryPasswordDesc": "使用您的恢复密码在新设备上加载您的账户。",
+    "recoveryPasswordCopied": "恢复密码已复制到剪贴板",
+    "recoveryPasswordHidden": "恢复密码已隐藏",
+    "recoveryPasswordHiddenTitle": "恢复密码已隐藏",
+    "recoveryPasswordHiddenDesc": "您的恢复密码已在此设备上永久隐藏。",
+    "hideRecoveryPassword": "隐藏恢复密码",
+    "hideRecoveryPasswordDesc": "永久隐藏您的恢复密码在此设备上。",
+    "permanently": "永久",
+    "hideRecoveryWarning": "没有您的恢复密码，您无法在新设备上加载您的账户。",
+    "hideRecoveryRecommendation": "我们强烈建议您在继续之前将您的恢复密码保存到一个安全且安全的地方。",
+    "copy": "复制",
+    "viewQR": "查看二维码",
+    "hide": "隐藏",
+    "deleteAccount": "删除账户",
+    "save": "保存",
+    "confirm": "确认",
+    "continue": "继续",
+    "cancel": "取消"
+  },
+  "LeaderBoard": {
+    "No": "排名",
+    "referralCode": "推荐码",
+    "coins": "币",
+    "rank": "排名",
+    "user": "用户",
+    "totalCoins": "总币"
+  },
+  "ProofOfWork": {
+    "hidden": "隐藏",
+    "getSuffix": "获取验证",
+    "getNewSuffix": "获取新验证",
+    "submit": "提交"
+  },
+  "Mining": {
+    "add": "添加",
+    "mining": "挖矿",
+    "nextMining": "下次挖矿将在",
+    "lastMining": "上次挖矿"
+  },
+  "MiningSession": {
+    "objective": {
+      "title": "目标",
+      "description": "找到一个字符串，使其产生一个SHA256哈希值，以",
+      "leadingZeros": "3个0为前缀"
+    },
+    "seeMore": "查看更多",
+    "seeLess": "收起",
+    "conditions": {
+      "title": "条件",
+      "sub1": {
+        "title": "允许的字符",
+        "description": "A–Z, a–z, 0–9"
+      },
+      "sub2": {
+        "title": "最大长度",
+        "description": "70个字符"
+      },
+      "sub3": {
+        "title": "前缀"
+      },
+      "sub4": {
+        "title": "后缀"
+      }
+    },
+    "yourTask": "您的任务是生成一个符合这些条件的有效字符串。🚀",
+    "reward": "奖励",
+    "goodLuck": "祝您挖矿成功！",
+    "needHelp": "需要帮助？使用我们的",
+    "miner": "挖矿工具",
+    "enterSolution": "输入",
+    "submit": "提交"
+  },
+  "Wallet": {
+    "title": "挖矿币详情",
+    "totalMined": "总挖矿币",
+    "minedCoins": "挖矿币",
+    "registerBonus": "奖励（通过推荐码注册）",
+    "referralsBonus": "来自推荐的奖励（挖矿币的 10%)",
+    "myWallet": "我的钱包",
+    "yourBalance": "您的矿币",
+    "yourReferralCode": "您的推荐码",
+    "activity": "活动",
+    "amount": "数量"
+  },
+  "Group": {
+    "referralCode": "推荐码",
+    "lastMingTime": "上次挖矿",
+    "status": "状态"
+  },
+  "Faq": {
+    "title": "常见问题",
+    "faq1Question": "什么是加密货币？",
+    "faq1Answer": "加密货币是一种数字或虚拟货币，使用加密技术来确保安全性。与美元或欧元等传统货币不同，加密货币通常是去中心化的，并基于一种称为区块链的技术运行。区块链是一个分布式账本，可以在网络上的多个计算机之间安全透明地记录所有交易。",
+
+    "faq2Question": "区块链中的智能合约是什么？",
+    "faq2Answer": "智能合约是存储在区块链上的自执行程序，当预定义条件满足时会自动执行合约条款。这些合约不需要中介，能够降低交易成本并增加透明度。智能合约通常用于金融交易、供应链跟踪和数字身份验证等领域。",
+
+    "faq3Question": "区块链如何在加密货币之外使用？",
+    "faq3Answer": "区块链在加密货币之外有着广泛的应用。它可以用于供应链管理，透明地跟踪商品从起点到终点的流动。同时，它支持数字身份验证、医疗领域的安全数据共享、房地产交易以及投票系统。主要优势是增加透明度、提高安全性和减少中介。",
+
+    "faq4Question": "什么是区块链技术？",
+    "faq4Answer": "区块链技术是一种去中心化的数字账本，可以在网络中的多个计算机上记录交易。它具有安全、透明和不可更改的特点，一旦数据被记录，就无法更改。每笔交易都存储在一个区块中，这些区块按照时间顺序链接在一起，形成了一个链条，因此被称为区块链。"
+  }
+}

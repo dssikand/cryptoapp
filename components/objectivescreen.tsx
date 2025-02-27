@@ -24,6 +24,8 @@ import CanvasQ from './common/canvasq';
 import {useNavigation} from '@react-navigation/native';
 import Navbar from './common/navbar';
 import {Copy, SquareCheck} from 'lucide-react-native';
+import { useQuery } from '@tanstack/react-query';
+import { ActiveUser } from '../services/user.services';
 
 const ObjectiveScreen = () => {
   const navigation = useNavigation();
@@ -36,7 +38,11 @@ const ObjectiveScreen = () => {
     setModalVisible(!modalVisible);
   };
   const outerContentTranslateY = useRef(new Animated.Value(-100)).current; // Start above screen
-
+const {data:activeuserdata, isLoading:isactiveloading} = useQuery({
+    queryFn: ActiveUser,
+    queryKey:['ACTIVE_USER']
+  }) 
+  console.log(activeuserdata,"rdegt")
   useEffect(() => {
     // Animate the outer content from top to its position
     Animated.timing(outerContentTranslateY, {

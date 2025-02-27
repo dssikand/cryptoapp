@@ -10,7 +10,6 @@ import {
   Clipboard,
   Modal,
 } from 'react-native';
-
 import {useNavigation} from '@react-navigation/native';
 // import Modal from "react-native-modal"
 import {Copy, ChevronDown, ChevronUp} from 'lucide-react-native';
@@ -41,7 +40,10 @@ export default function PassphraseGenerator({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const navigation = useNavigation();
-
+  const copyToClipboard = () => {
+    Clipboard.setString(text);
+    Alert.alert('Copied!', 'Text copied to clipboard');
+  };
   const items = [
     {label: 'English', value: 'en'},
     {label: 'Spanish', value: 'es'},

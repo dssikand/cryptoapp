@@ -48,11 +48,8 @@ export default function SignInPassphraseStep({
           Toast.show({
             type: 'success',
             text1: 'Login Successfully',
-          });
-          navigation.navigate('App', {
-            screen: 'Home',
-            params: {screen: 'MainTabs', params: {screen: 'Wallet'}},
-          });
+          });3
+          navigation.navigate('App', {screen: 'Home', params: {screen: 'MainTabs', params: {screen: 'Wallet'}}, });
           SetAuthToken(response.token);
           SetUser(response.data);
         } else {

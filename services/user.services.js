@@ -20,3 +20,27 @@ export const SignUpUser = async params => {
     return e.response;
   }
 };
+export const ActiveUser = async params => {
+  try {
+    const {data} = await Base_URL.get(
+      '/puzzle/active',
+      params,
+    );
+    return data;
+  } catch (e) {
+    return e.response;
+  }
+ 
+};
+export const CurrentUser = async params => {
+  
+  try {
+    const {data} = await Base_URL.get(
+      '/user/me',
+      params,
+    );
+    return data;
+  } catch (e) {
+    return e.response;
+  }
+};
