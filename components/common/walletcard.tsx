@@ -11,14 +11,14 @@ import {
 import SvgUri from 'react-native-svg-uri';
 import Navbar from './navbar';
 
-export function WalletCard() {
+export function WalletCard({refrealCode, totalValue}) {
   //   const t = useTranslations("Wallet");
   //   const { userData } = useUserContext();
   //   const referralCode = userData?.referralCode;
-  //   const amount =
-  //     userData?.totalValue.referralBonus +
-  //     userData.totalValue.referralsMiningCodeSum +
-  //     userData.totalValue.userMiningCodeSum;
+  const amount =
+    totalValue?.referralBonus +
+    totalValue?.referralsMiningCodeSum +
+    totalValue?.userMiningCodeSum;
 
   return (
     <View style={styles.container}>
@@ -51,7 +51,7 @@ export function WalletCard() {
           <View style={styles.balanceSection}>
             <Text style={styles.currencyText}>QYN</Text>
             <View style={styles.balance}>
-              <Text style={styles.balanceText}>0</Text>
+              <Text style={styles.balanceText}>{amount}</Text>
               <Text style={styles.decimalText}>.00</Text>
             </View>
           </View>
@@ -60,7 +60,7 @@ export function WalletCard() {
             <Text style={styles.referralLabel}>Your Referral Code</Text>
             <View style={styles.referralCodeContainer}>
               <Text style={styles.referralCode}>
-                7kunusxk16
+                {refrealCode}
                 <Copy color={'white'} size={20} style={styles.iconcopy} />
               </Text>
             </View>

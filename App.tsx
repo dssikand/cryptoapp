@@ -1,11 +1,19 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { View, Text } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {NavigationContainer} from '@react-navigation/native';
+import {View, Text, ActivityIndicator, BackHandler} from 'react-native';
 import 'react-native-gesture-handler';
-import { Bell, Building2, HomeIcon, LucideHome, Pickaxe, Settings, Wallet } from 'lucide-react-native';
+import {
+  Bell,
+  Building2,
+  HomeIcon,
+  LucideHome,
+  Pickaxe,
+  Settings,
+  Wallet,
+} from 'lucide-react-native';
 
 // Import Screens
 import StartScreen from './components/startscreen';
@@ -19,39 +27,39 @@ import SettingScreen from './components/settingscreen';
 import ReferalCode from './components/referalcode';
 import CustomDrawer from './components/common/customdrawer';
 import ObjectiveScreen from './components/objectivescreen';
-
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // Create Navigators
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
-
+const queryClient = new QueryClient();
 // ✅ Bottom Tab Navigator (Only for Logged-in Users)
 function BottomTabs() {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused }) => {
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused}) => {
           let iconName;
-         if (route.name === 'Wallet') {
-            iconName = <Wallet color={focused ? "#ff922b" : "#adb5bd"} />;
+          if (route.name === 'Wallet') {
+            iconName = <Wallet color={focused ? '#ff922b' : '#adb5bd'} />;
           } else if (route.name === 'Mining') {
-            iconName = <Pickaxe color={focused ? "#ff922b" : "#adb5bd"} />;
+            iconName = <Pickaxe color={focused ? '#ff922b' : '#adb5bd'} />;
           } else if (route.name === 'Leader') {
-            iconName = <Building2 color={focused ? "#ff922b" : "#adb5bd"} />;
+            iconName = <Building2 color={focused ? '#ff922b' : '#adb5bd'} />;
           } else if (route.name === 'Announcement') {
-            iconName = <Bell color={focused ? "#ff922b" : "#adb5bd"} />;
+            iconName = <Bell color={focused ? '#ff922b' : '#adb5bd'} />;
           } else if (route.name === 'Account') {
-            iconName = <Settings color={focused ? "#ff922b" : "#adb5bd"} />;
+            iconName = <Settings color={focused ? '#ff922b' : '#adb5bd'} />;
           }
           return <Text>{iconName}</Text>;
         },
         tabBarActiveTintColor: '#ff922b',
         tabBarInactiveTintColor: 'gray',
-        tabBarStyle: { backgroundColor: '#1a1b1e', paddingBottom: 5 },
+        tabBarStyle: {backgroundColor: '#1a1b1e', paddingBottom: 5},
         headerShown: false,
-      })}
-    >
-      
+      })}>
       <Tab.Screen name="Wallet" component={WalletScreen} />
       <Tab.Screen name="Mining" component={MiningScreen} />
       <Tab.Screen name="Leader" component={LeaderboardScreen} />
@@ -64,7 +72,7 @@ function BottomTabs() {
 // ✅ Auth Stack (For Login & Signup - No Bottom Tabs)
 function AuthStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Home2" component={StartScreen} />
       <Stack.Screen name="SignIn" component={SignInScreen} />
       <Stack.Screen name="ReferalCode" component={ReferalCode} />
@@ -77,10 +85,9 @@ function AuthStack() {
 // ✅ Main Stack (Includes Bottom Tabs Inside a Stack)
 function MainStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="MainTabs" component={BottomTabs} />
       <Stack.Screen name="Objective" component={ObjectiveScreen} />
-
     </Stack.Navigator>
   );
 }
@@ -89,14 +96,14 @@ function MainStack() {
 function DrawerNavigator() {
   return (
     <Drawer.Navigator
-        drawerContent={(props) => <CustomDrawer {...props} />}
-        screenOptions={{
-          drawerStyle: {
-            backgroundColor: '#121212', // Dark Mode Drawer
-            width: 250,
-          },
-          headerShown: false, // Hide header
-        }}>
+      drawerContent={props => <CustomDrawer {...props} />}
+      screenOptions={{
+        drawerStyle: {
+          backgroundColor: '#121212', // Dark Mode Drawer
+          width: 250,
+        },
+        headerShown: false, // Hide header
+      }}>
       <Drawer.Screen name="Home" component={MainStack} />
       <Drawer.Screen name="Objective" component={ObjectiveScreen} />
     </Drawer.Navigator>
@@ -105,19 +112,56 @@ function DrawerNavigator() {
 
 // ✅ Root Stack (Handles Auth vs Main App)
 export default function App() {
-  const isLoggedIn = false; // Replace with actual authentication state
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        setIsLoggedIn(!!token); // Convert to boolean (true if token exists, false otherwise)
+      } catch (error) {
+        console.error('Error fetching auth token:', error);
+      }
+      setIsLoading(false);
+    };
 
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
+    const backAction = () => {
+      if (isLoggedIn) {
+        BackHandler.exitApp(); // Exit app if on main app screen
+        return true;
+      }
+      return false; // Allow default behavior for login/signup
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, [isLoggedIn]);
+  if (isLoading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#ff922b" />
+      </View>
+    );
+  }
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* {isLoggedIn ? (
-          <Stack.Screen name="App" component={DrawerNavigator} />
-        ) : (
-          <Stack.Screen name="Auth" component={AuthStack} />
-        )} */}
-        <Stack.Screen name="Auth" component={AuthStack} />
-        <Stack.Screen name="App" component={DrawerNavigator} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+          {isLoggedIn ? (
+            <Stack.Screen name="App" component={DrawerNavigator} />
+          ) : (
+            <Stack.Screen name="Auth" component={AuthStack} />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+      <Toast position={'bottom'} />
+    </QueryClientProvider>
   );
 }

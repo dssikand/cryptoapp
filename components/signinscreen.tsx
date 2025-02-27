@@ -1,8 +1,22 @@
 import React,{useState} from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
-
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
+import {useMutation} from '@tanstack/react-query';
+import {SignInUser} from '../services/user.services';
+import Toast from 'react-native-toast-message';
+import {SetAuthToken, SetUser} from '../utils/common';
 interface SignInPassphraseStepProps {
   value: string;
   loading: boolean;
@@ -17,34 +31,78 @@ export default function SignInPassphraseStep({
   onSignIn,
 }: SignInPassphraseStepProps) {
   const navigation = useNavigation();
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
+  const {mutateAsync: siginUser, isPending} = useMutation({
+    mutationFn: SignInUser,
+    mutationKey: ['SIGN_USER'],
+  });
+  const HandleLogin = async () => {
+    if (text.trim().length < 0) {
+      Alert.alert("Phrase Can't be Empty");
+    } else {
+      try {
+        const phrase = text.split(' ').join('');
+        const response = await siginUser({phrases: phrase, type: 'login'});
+        console.log(response);
+        if (response.success) {
+          Toast.show({
+            type: 'success',
+            text1: 'Login Successfully',
+          });
+          navigation.navigate('App', {
+            screen: 'Home',
+            params: {screen: 'MainTabs', params: {screen: 'Wallet'}},
+          });
+          SetAuthToken(response.token);
+          SetUser(response.data);
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: response.message,
+          });
+        }
+      } catch (e: any) {
+        console.log(e.response.data);
+        Toast.show({
+          type: 'error',
+          text1: e.response.data.message,
+        });
+      }
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.box}>
         <Text style={styles.title}>Passphrase Sign In</Text>
-        <Text style={styles.subtitle}>Enter your passphrase to sign in to your account.</Text>
+        <Text style={styles.subtitle}>
+          Enter your passphrase to sign in to your account.
+        </Text>
 
         <TextInput
-        style={styles.textArea}
-        multiline
-        numberOfLines={6} // Control the number of visible lines
-        placeholder="Passphrase"
-        placeholderTextColor={"#fff"}
-        value={text}
-        onChangeText={(newText) => setText(newText)}
-      />
-
+          style={styles.textArea}
+          multiline
+          numberOfLines={6} // Control the number of visible lines
+          placeholder="Passphrase"
+          placeholderTextColor={'#fff'}
+          value={text}
+          onChangeText={newText => setText(newText)}
+        />
 
         <TouchableOpacity
           style={[styles.button, !value && styles.buttonDisabled]}
-          // onPress={onSignIn}
-          onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Wallet"}}})}
-        >
-          {loading ? <ActivityIndicator color="#FFF" /> : <Text style={styles.buttonText}>Passphrase Sign In</Text>}
+          onPress={HandleLogin}
+          disabled={text.trim().length == 0}>
+          {isPending ? (
+            <ActivityIndicator color="#FFF" />
+          ) : (
+            <Text style={styles.buttonText}>Passphrase Sign In</Text>
+          )}
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate("SignUpScreen")} style={styles.linkContainer}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('SignUpScreen')}
+        style={styles.linkContainer}>
         <Text style={styles.text}>New User? </Text>
         <Text style={styles.linkText}>Create an account</Text>
       </TouchableOpacity>

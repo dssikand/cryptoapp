@@ -72,16 +72,12 @@ const LeaderboardScreen = () => {
                 }}>
                 <View style={styles.rankContainer}>
                   <Text style={styles.rankText}>Rank</Text>
-                  <View
-                    style={{
-                      padding: 10,
-                    }}>
-                    <LinearGradient
-                      colors={['#F06400', '#FFBF6E']}
-                      style={styles.rankCircle}>
-                      <Text style={styles.numberText}>{item.rank}</Text>
-                    </LinearGradient>
-                  </View>
+
+                  <LinearGradient
+                    colors={['#F06400', '#FFBF6E']}
+                    style={styles.rankCircle}>
+                    <Text style={styles.numberText}>{item.rank}</Text>
+                  </LinearGradient>
                 </View>
                 <View style={styles.userContainer}>
                   <Text style={styles.username}>User</Text>

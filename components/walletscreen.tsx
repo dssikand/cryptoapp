@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -16,10 +16,19 @@ import * as Animatable from 'react-native-animatable';
 import {WalletCard} from './common/walletcard';
 import {useNavigation} from '@react-navigation/native';
 import Navbar from './common/navbar';
+import {GetUser} from '../utils/common';
 
 export function WalletScreen() {
   const navigation = useNavigation();
-
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    async function SetUser() {
+      const user = await GetUser();
+      setUser(user);
+    }
+    SetUser();
+  }, []);
+  console.log(user);
   return (
     <ImageBackground
       source={require('../assets/img/crypt.jpeg')} // Change to your image path
@@ -29,7 +38,10 @@ export function WalletScreen() {
       <View style={styles.container}>
         {/* Wallet Card with Fade-in Animation */}
         <Animatable.View animation="fadeInUp" duration={1200} delay={500}>
-          <WalletCard />
+          <WalletCard
+            refrealCode={user?.referralCode}
+            totalValue={user?.totalValue}
+          />
         </Animatable.View>
 
         {/* Levels Section */}
@@ -74,7 +86,12 @@ export function WalletScreen() {
                 </View>
                 <View style={styles.amount}>
                   <Text style={styles.amountText}>
-                    rt<Text style={styles.decimalText}>.00</Text>
+                    <Text style={styles.decimalText}>
+                      {activity == 'Mined Coins'
+                        ? user?.totalValue?.referralBonus
+                        : user?.totalValue?.referralsMiningCodeSum}
+                      .00
+                    </Text>
                   </Text>
                 </View>
               </View>
