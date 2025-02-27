@@ -1,4 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
+import {useMutation} from '@tanstack/react-query';
 
 import {
   View,
@@ -12,6 +13,7 @@ import {
   Animated,
   Easing,
   Linking,
+  Alert,
 } from 'react-native';
 import Svg, {Path} from 'react-native-svg';
 import LinearGradient from 'react-native-linear-gradient';
@@ -25,24 +27,73 @@ import {useNavigation} from '@react-navigation/native';
 import Navbar from './common/navbar';
 import {Copy, SquareCheck} from 'lucide-react-native';
 import { useQuery } from '@tanstack/react-query';
-import { ActiveUser } from '../services/user.services';
+import { ActiveUser, CurrentUser, SubmitCode } from '../services/user.services';
+import { t } from 'i18next';
+import CommonLoader from './common/commonloader';
+import Toast from 'react-native-toast-message';
+import { SetAuthToken, SetUser } from '../utils/common';
 
 const ObjectiveScreen = () => {
   const navigation = useNavigation();
   const [seeMoreVisible, setSeeMoreVisible] = useState(false);
-  const openLink = () => {
-    Linking.openURL('https://www.qoyn.network/mining.html?prefix=7kunusxk16');
+  const openLink = (prefix) => {
+    Linking.openURL(`https://www.qoyn.network/mining.html?prefix=${prefix}`);
   };
+    const [code, setCode] = useState('');
+  
   const [modalVisible, setModalVisible] = useState(false);
+  const {mutateAsync: codeSubmit, isPending} = useMutation({
+    mutationFn: SubmitCode,
+    mutationKey: ['SUBMIT_CODE'],
+  });
+   const CodeSubmit = async () => {
+      if (code.trim().length < 0) {
+        Alert.alert("Phrase Can't be Empty");
+      } else {
+        try {
+          const response = await codeSubmit({ code: code});
+          console.log(response);
+          if (response.success) {
+            Toast.show({
+              type: 'success',
+              text1: 'Login Successfully',
+            });3
+            navigation.navigate('App', {screen: 'Home', params: {screen: 'MainTabs', params: {screen: 'Mining'}}, });
+            SetAuthToken(response.token);
+            SetUser(response.data);
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: response.message,
+            });
+            navigation.navigate('App', {screen: 'Home', params: {screen: 'MainTabs', params: {screen: 'Mining'}}, });
+
+          }
+        } catch (e: any) {
+          console.log(e.response.data);
+          Toast.show({
+            type: 'error',
+            text1: e.response.data.message,
+          });
+        }
+      }
+    };
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
+  const {data, isLoading} = useQuery({
+      queryFn: CurrentUser,
+      queryKey:['CURRENT_USER']
+    }) 
+  
   const outerContentTranslateY = useRef(new Animated.Value(-100)).current; // Start above screen
 const {data:activeuserdata, isLoading:isactiveloading} = useQuery({
     queryFn: ActiveUser,
     queryKey:['ACTIVE_USER']
   }) 
+  
   console.log(activeuserdata,"rdegt")
+  // const activepuzzle=activeuserdata.data.puzzle ;
   useEffect(() => {
     // Animate the outer content from top to its position
     Animated.timing(outerContentTranslateY, {
@@ -62,6 +113,9 @@ const {data:activeuserdata, isLoading:isactiveloading} = useQuery({
       useNativeDriver: true,
     }).start();
   }, []);
+  if (isactiveloading|| isLoading){
+     return <CommonLoader/>
+  }
   return (
     <ImageBackground
       source={require('../assets/img/crypt.jpeg')} // Change to your image path
@@ -78,11 +132,11 @@ const {data:activeuserdata, isLoading:isactiveloading} = useQuery({
         {/* Continue Button */}
 
         <View style={styles.centeredView}>
-      <Text style={styles.modalText}>Objective</Text>
+      <Text style={styles.modalText}>{t("ProofOfWork.objective")}</Text>
 
           <View style={styles.modalView}>
             <Text style={styles.modalText2}>
-              Find a string that produces a SHA256 hash starting with
+            {t("MiningSession.objective.description")} <Text style={styles.text2}>{activeuserdata.data.puzzle}</Text> 
             </Text>
             <TouchableOpacity
               onPress={() => setSeeMoreVisible(!seeMoreVisible)}>
@@ -92,13 +146,13 @@ const {data:activeuserdata, isLoading:isactiveloading} = useQuery({
             </TouchableOpacity>
             {seeMoreVisible && (
               <View>
-                <Text style={styles.title}>Conditions</Text>
+                <Text style={styles.title}>{t("MiningSession.conditions.title")}</Text>
 
                 {/* Allowed Characters */}
                 <View style={styles.row}>
                   <SquareCheck color={'#ff922b'} />
                   <View style={styles.textContainer}>
-                    <Text style={styles.label}>Allowed Characters:</Text>
+                    <Text style={styles.label}>{t("MiningSession.conditions.sub1.title")}:</Text>
                     <Text style={styles.value}>A–Z, a–z, 0–9</Text>
                   </View>
                 </View>
@@ -107,8 +161,8 @@ const {data:activeuserdata, isLoading:isactiveloading} = useQuery({
                 <View style={styles.row}>
                   <SquareCheck color={'#ff922b'} />
                   <View style={styles.textContainer}>
-                    <Text style={styles.label}>Max Length:</Text>
-                    <Text style={styles.value}>70 characters</Text>
+                    <Text style={styles.label}>{t("MiningSession.conditions.sub2.title")}</Text>
+                    <Text style={styles.value}>{t("MiningSession.conditions.sub2.description")}:</Text>
                   </View>
                 </View>
 
@@ -116,9 +170,9 @@ const {data:activeuserdata, isLoading:isactiveloading} = useQuery({
                 <View style={styles.row}>
                   <SquareCheck color={'#ff922b'} />
                   <View style={styles.textContainer}>
-                    <Text style={styles.label}>Prefix:</Text>
+                    <Text style={styles.label}>{t("MiningSession.conditions.sub3.title")}:</Text>
                     <View style={styles.copyContainer}>
-                      <Text style={styles.copyText}>7kunusxk16</Text>
+                      <Text style={styles.copyText}>{data.data.referralCode}</Text>
                       <Copy color={'white'} />
                     </View>
                   </View>
@@ -128,9 +182,9 @@ const {data:activeuserdata, isLoading:isactiveloading} = useQuery({
                 <View style={styles.row}>
                   <SquareCheck color={'#ff922b'} />
                   <View style={styles.textContainer}>
-                    <Text style={styles.label}>Suffix:</Text>
+                    <Text style={styles.label}>{t("MiningSession.conditions.sub4.title")}:</Text>
                     <View style={styles.copyContainer}>
-                      <Text style={styles.copyText}>1234</Text>
+                      <Text style={styles.copyText}>{data.data.suffix.suffix}</Text>
                       <Copy color={'white'} />
                     </View>
                   </View>
@@ -138,23 +192,22 @@ const {data:activeuserdata, isLoading:isactiveloading} = useQuery({
 
                 {/* Task Description */}
                 <Text style={styles.description}>
-                  Your task is to generate a valid string that meets these
-                  criteria. 🚀
+                {t("MiningSession.yourTask")} 🚀
                 </Text>
 
                 {/* Reward Section */}
                 <View style={styles.rewardContainer}>
-                  <Text style={styles.label}>Reward</Text>
-                  <Text style={styles.value}>70</Text>
+                  <Text style={styles.label}>{t("MiningSession.reward")}</Text>
+                  <Text style={styles.value}>{activeuserdata.data.value}</Text>
                   <Text style={styles.label}>Qoyns</Text>
                 </View>
 
                 {/* Footer */}
                 <View style={styles.footer}>
-                  <Text style={styles.footerText}>Good luck mining Qoyn!</Text>
+                  <Text style={styles.footerText}>{t("MiningSession.goodLuck")}</Text>
                   <Text style={styles.helpText}>
-  Need help? Use our
-  <Text style={[styles.helpText, styles.link]} onPress={openLink}> miner.</Text>
+                  {t("MiningSession.needHelp")}
+  <Text style={[styles.helpText, styles.link]} onPress={()=>openLink(data.data.referralCode)}>   {t("MiningSession.miner")}.</Text>
 </Text>
                 </View>
               </View>
@@ -170,13 +223,19 @@ const {data:activeuserdata, isLoading:isactiveloading} = useQuery({
                 borderWidth: 1,
               }}>
               <TextInput
-                placeholder="Enter your solution"
+                placeholder={t("MiningSession.enterSolution")}
+          onChangeText={newCode => setCode(newCode)}
+
                 placeholderTextColor="rgba(255, 255, 255, 0.5)"
                 style={styles.inputText}
               />
-              <TouchableOpacity style={styles.submitbtn} onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Mining"}}})}>
+              <TouchableOpacity style={styles.submitbtn} 
+              // onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Mining"}}})}
+          onPress={CodeSubmit}
+
+              >
                 <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 16}}>
-                  Submit
+                {t("MiningSession.submit")}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -437,6 +496,12 @@ const styles = StyleSheet.create({
   value: {
     fontWeight: '600',
     color: '#ff922b',
+  },
+  text2:{
+    color: '#ff922b',
+    marginLeft:20,
+    fontWeight:"700"
+
   },
   copyContainer: {
     flexDirection: 'row',

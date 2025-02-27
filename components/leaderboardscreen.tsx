@@ -15,6 +15,7 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import Navbar from './common/navbar';
+import { t } from 'i18next';
 
 const leaderboardData = [
   {id: '1', rank: 1, username: 'backy6666', coins: '25.20'},
@@ -71,20 +72,24 @@ const LeaderboardScreen = () => {
                   padding: Platform.OS == 'ios' ? 10 : 0,
                 }}>
                 <View style={styles.rankContainer}>
-                  <Text style={styles.rankText}>Rank</Text>
-
-                  <LinearGradient
-                    colors={['#F06400', '#FFBF6E']}
-                    style={styles.rankCircle}>
-                    <Text style={styles.numberText}>{item.rank}</Text>
-                  </LinearGradient>
+                  <Text style={styles.rankText}>{t("LeaderBoard.rank")}</Text>
+                  <View
+                    style={{
+                      padding: 10,
+                    }}>
+                    <LinearGradient
+                      colors={['#F06400', '#FFBF6E']}
+                      style={styles.rankCircle}>
+                      <Text style={styles.numberText}>{item.rank}</Text>
+                    </LinearGradient>
+                  </View>
                 </View>
                 <View style={styles.userContainer}>
-                  <Text style={styles.username}>User</Text>
+                  <Text style={styles.username}>{t("LeaderBoard.user")}</Text>
                   <Text style={styles.coins}>{item.username}</Text>
                 </View>
                 <View style={styles.userContainer}>
-                  <Text style={styles.username}>Total Coins</Text>
+                  <Text style={styles.username}>{t("LeaderBoard.totalCoins")}</Text>
                   <Text style={styles.coins}>
                     {item.coins}
                     <Text style={styles.coinsDecimal}>.00</Text>
@@ -105,7 +110,7 @@ const LeaderboardScreen = () => {
         source={require('../assets/img/crypt.jpeg')}
         style={styles.background}
         resizeMode="cover">
-        <Text style={styles.Toptext}>LeaderBoard</Text>
+        <Text style={styles.Toptext}>{t("Common.leader")}</Text>
 
         {/* Ensuring Full-Height View for FlatList */}
         <View style={styles.bg}>

@@ -44,3 +44,15 @@ export const CurrentUser = async params => {
     return e.response;
   }
 };
+export const SubmitCode = async params => {
+  
+  try {
+    const {data} = await Base_URL.post(
+      '/user/me/mining-code',
+      params,
+    );
+    return data;
+  } catch (e) {
+    return e.response;
+  }
+};

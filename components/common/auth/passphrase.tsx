@@ -19,6 +19,8 @@ import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
+import i18n from '../../../i18n';
+import { t } from 'i18next';
 const languages = [
   {value: 'en', label: 'ENG'},
   {value: 'cn', label: '中文'},
@@ -120,6 +122,7 @@ export default function PassphraseGenerator({
               color: '#fff',
             }}
             theme="DARK"
+            onChangeValue={(value)=> i18n.changeLanguage(value)}
           />
         </View>
 
@@ -139,32 +142,33 @@ export default function PassphraseGenerator({
             Clipboard.setString(passphrase.join(' '));
           }}>
           <Text style={styles.copyText}>
-            Copy All Words{' '}
+           {t("Auth.passphraseGenerator.copyAllWords")}
             <Copy size={20} color={'white'} style={styles.icontext} />{' '}
           </Text>
         </TouchableOpacity>
         <View style={styles.flexEnd}>
           <Text style={styles.disclaimerText}>
-            Never share your secret passphrase with anyone and store it safely.
+          {t("Auth.passphraseGenerator.neverShare")}
           </Text>
 
           <TouchableOpacity style={styles.buttonTelegram} onPress={toggleModal}>
-            <Text style={styles.buttonText}>Continue </Text>
-          </TouchableOpacity>
+            <Text style={styles.buttonText}>  {t("Auth.passphraseGenerator.continue")} </Text>
+          </TouchableOpacity> 
         </View>
       </View>
 
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Important Security Notice</Text>
+            <Text style={styles.modalText}> {t("Auth.confirmationModal.title")}</Text>
             <Text style={styles.modalText2}>
-              Have you safely stored your passphrase?
+            {t("Auth.confirmationModal.description1")}
             </Text>
 
             <View style={styles.flexbtn}>
               <TouchableOpacity style={styles.nobtn} onPress={toggleModal}>
-                <Text style={styles.nobtntext}>No </Text>
+                <Text style={styles.nobtntext}> {t("Auth.confirmationModal.no")}
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -173,7 +177,7 @@ export default function PassphraseGenerator({
                   navigation.navigate("ReferalCode")}
                 
                 >
-                <Text style={styles.yesbtntext}>Yes </Text>
+                <Text style={styles.yesbtntext}> {t("Auth.confirmationModal.yes")} </Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -5,6 +5,8 @@ import { Bell, Building2, Pickaxe, Wallet, Settings, ChevronDown, ChevronUp } fr
 import { responsiveWidth } from 'react-native-responsive-dimensions';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useNavigation } from '@react-navigation/native';
+import i18n from '../../i18n';
+import { t } from 'i18next';
 const languages = [
   { value: 'en', label: 'ENG' },
   { value: 'cn', label: '中文' },
@@ -21,30 +23,30 @@ const CustomDrawer = (props) => {
       <View style={styles.menuItems}>
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Wallet"}}})}>
           <Wallet color={"#fff"} />
-          <Text style={styles.menuText}>Wallet</Text>
+          <Text style={styles.menuText}>{t("Common.wallet")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Mining"}}})}>
           <Pickaxe color={"#fff"} />
-          <Text style={styles.menuText}>Mining</Text>
+          <Text style={styles.menuText}>{t("Common.mining")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Leader"}}})}>
           <Building2 color={"#fff"} />
-          <Text style={styles.menuText}>LeaderBoard</Text>
+          <Text style={styles.menuText}>{t("Common.leader")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Announcement"}}})}>
           <Bell color={"#fff"} />
-          <Text style={styles.menuText}>Announcement</Text>
+          <Text style={styles.menuText}>{t("Common.announcement")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Account"}}})}>
           <Settings color={"#fff"} />
-          <Text style={styles.menuText}>Account</Text>
+          <Text style={styles.menuText}>{t("Common.Account")}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.logoutButton} onPress={() => alert('Logging out')}>
-          <Text style={[styles.menuText, { color: '#fff' }]}>Logout</Text>
+          <Text style={[styles.menuText, { color: '#fff' }]}>{t("Common.logout")}</Text>
         </TouchableOpacity>
       </View>
 
@@ -72,6 +74,7 @@ const CustomDrawer = (props) => {
             color: '#fff',
           }}
           theme="DARK"
+          onChangeValue={(value)=> i18n.changeLanguage(value)}
         />
       </View>
     </DrawerContentScrollView>
@@ -100,7 +103,7 @@ const styles = StyleSheet.create({
   bottomSection: {
     flex: 1,
     justifyContent: "flex-end",
-    paddingBottom: 20,
+    paddingBottom: 70,
   },
   logoutButton: {
     borderColor: "#d9480f",

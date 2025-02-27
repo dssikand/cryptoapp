@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, ImageBackground, ScrollView } from 'react-native';
 import { responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions';
 import Navbar from './common/navbar';
+import { t } from 'i18next';
 
 const AnnouncemntScreen = () => {
   return (
@@ -11,7 +12,7 @@ const AnnouncemntScreen = () => {
       resizeMode="cover"
     >
       <Navbar />
-      <Text style={styles.Toptext}>Announcement</Text>
+      <Text style={styles.Toptext}>{t("Common.announcement")}</Text>
 
       {/* Scrollable Content */}
       <ScrollView 

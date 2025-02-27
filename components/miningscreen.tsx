@@ -25,6 +25,8 @@ import Navbar from './common/navbar';
 import { Copy, SquareCheck } from 'lucide-react-native';
 import { useQuery } from '@tanstack/react-query';
 import { ActiveUser, CurrentUser } from '../services/user.services';
+import { t } from 'i18next';
+
 const MiningScreen = () => {
   const navigation = useNavigation();
   const [seeMoreVisible, setSeeMoreVisible] = useState(false);
@@ -75,7 +77,7 @@ const MiningScreen = () => {
         <Navbar/>
 
       <View style={styles.container}>
-      <Text style={styles.Toptext}>Mining</Text>
+      <Text style={styles.Toptext}>{t("Common.mining")}</Text>
 
         {/* Image Section */}
         <View style={styles.imageContainer}>
@@ -90,7 +92,7 @@ const MiningScreen = () => {
         {/* Referral Code Section */}
         <View style={styles.referralSection}>
           
-          <Text style={styles.referralText}>Referral Code</Text>
+          <Text style={styles.referralText}>{t("Common.referralCode")}</Text>
           <View style={styles.referralCodeContainer}>
               <Text style={styles.referralCode}>{referalcode} <Copy color={"white"} size={20} style={styles.iconcopy}/></Text>
              
@@ -134,7 +136,7 @@ const MiningScreen = () => {
               ]}>
               <View style={styles.flexDiv}>
                 <View style={styles.balanceHeader}>
-                  <Text style={styles.balanceText}>Your balance</Text>
+                  <Text style={styles.balanceText}>{t("Wallet.myWallet")}</Text>
                   <View style={styles.balanceAmount}>
                     <Text style={styles.currency}>QYN</Text>
                     <Text style={styles.amount}>0</Text>
@@ -143,7 +145,7 @@ const MiningScreen = () => {
                 </View>
                 <View style={styles.levelContainer}>
                   <Text style={styles.levelText}>Level 1</Text>
-                  <Text style={styles.levelSubText}>Platinum</Text>
+                  <Text style={styles.levelSubText}>{t("Common.platinum")}</Text>
                 </View>
               </View>
             </Animated.View>
@@ -156,7 +158,7 @@ const MiningScreen = () => {
             style={[styles.buttonContainer, {transform: [{translateY}]}]}>
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Objective")}>
               <Text style={styles.buttonText} >
-                Continue
+              {t("Common.continue")}
               </Text>
             </TouchableOpacity>
           </Animated.View>

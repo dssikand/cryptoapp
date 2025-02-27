@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import { t } from "i18next";
 
 export default function StartScreen() {
   const navigation = useNavigation();
@@ -54,11 +55,11 @@ export default function StartScreen() {
         {/* Animated Buttons */}
         <Animated.View style={[styles.buttonContainer, { opacity: buttonFade, transform: [{ translateY: buttonSlide }] }]}>
           <TouchableOpacity style={styles.buttonTelegram} onPress={() => navigation.navigate("Auth", { screen: "SignIn" })}>
-            <Text style={styles.buttonText}>Sign in</Text>
+            <Text style={styles.buttonText}>{t("Common.signIn")}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.buttonTelegram2} onPress={() => navigation.navigate("Auth", { screen: "SignUp" })}>
-            <Text style={styles.buttonText2}>New User Sign Up</Text>
+            <Text style={styles.buttonText2}>{t("Common.signUp")}</Text>
           </TouchableOpacity>
         </Animated.View>
       </View>

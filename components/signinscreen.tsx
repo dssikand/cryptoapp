@@ -1,22 +1,16 @@
-import React,{useState} from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {
-  responsiveHeight,
-  responsiveWidth,
-} from 'react-native-responsive-dimensions';
+
 import {useMutation} from '@tanstack/react-query';
 import {SignInUser} from '../services/user.services';
 import Toast from 'react-native-toast-message';
 import {SetAuthToken, SetUser} from '../utils/common';
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import { t } from "i18next";
+import { signInWithPassphrase } from "./api/authService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 interface SignInPassphraseStepProps {
   value: string;
   loading: boolean;
@@ -70,10 +64,8 @@ export default function SignInPassphraseStep({
   return (
     <View style={styles.container}>
       <View style={styles.box}>
-        <Text style={styles.title}>Passphrase Sign In</Text>
-        <Text style={styles.subtitle}>
-          Enter your passphrase to sign in to your account.
-        </Text>
+        <Text style={styles.title}>{t("Auth.passphraseSignIn")}</Text>
+        <Text style={styles.subtitle}>{t("Auth.enterPassphrase")}</Text>
 
         <TextInput
           style={styles.textArea}
@@ -92,18 +84,19 @@ export default function SignInPassphraseStep({
           {isPending ? (
             <ActivityIndicator color="#FFF" />
           ) : (
-            <Text style={styles.buttonText}>Passphrase Sign In</Text>
+            <Text style={styles.buttonText}>{t("Auth.passphraseSignIn")}</Text>
           )}
         </TouchableOpacity>
       </View>
-
-      <TouchableOpacity
-        onPress={() => navigation.navigate('SignUpScreen')}
-        style={styles.linkContainer}>
-        <Text style={styles.text}>New User? </Text>
-        <Text style={styles.linkText}>Create an account</Text>
+        
+        <TouchableOpacity onPress={() => navigation.navigate("SignUpScreen")} style={styles.linkContainer}>
+        <Text style={styles.text}>{t("Auth.newUser?")} </Text>
+        <Text style={styles.linkText}>{t("Auth.createYourQoynAccount")}</Text>
       </TouchableOpacity>
-    </View>
+      </View>
+
+     
+    
   );
 }
 
@@ -117,16 +110,16 @@ const styles = StyleSheet.create({
   },
   textArea: {
     width: responsiveWidth(80),
-    height:responsiveHeight(10),
+    height: responsiveHeight(10),
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
-    textAlignVertical: "top", // This ensures text starts from the top of the input
-    marginBottom:16,
-    color:"#fff",
-    backgroundColor:"#313334",
+    textAlignVertical: "top",
+    marginBottom: 16,
+    color: "#fff",
+    backgroundColor: "#313334",
   },
   box: {
     width: "100%",
@@ -138,8 +131,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     elevation: 5,
     alignItems: "center",
-    borderColor:"#d9480f",
-    borderWidth:2,
+    borderColor: "#d9480f",
+    borderWidth: 2,
   },
   title: {
     fontSize: 24,
@@ -152,15 +145,6 @@ const styles = StyleSheet.create({
     color: "#777",
     marginBottom: 20,
   },
-//   input: {
-//     width: "100%",
-//     borderWidth: 1,
-//     borderColor: "#ccc",
-//     borderRadius: 8,
-//     padding: 10,
-//     fontSize: 16,
-//     marginBottom: 15,
-//   },
   button: {
     width: "100%",
     backgroundColor: "#007BFF",

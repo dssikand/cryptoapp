@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // For navigation
 import PassphraseGenerator from "./common/auth/passphrase";
+import { t } from "i18next";
 const SignUpScreen = ({
 
   isSignUpLoading,
@@ -26,13 +27,13 @@ const SignUpScreen = ({
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <Text style={styles.text}>
-          Already have an account?{" "}
+         {t("Auth.alreadyHaveAccount")}
           <TouchableOpacity
             // onPress={() => {
             //   navigation.navigate("SignIn", { step: "passphrase" }); // Assuming "SignIn" is the name of your sign-in screen
             // }}
           >
-            <Text style={styles.link}>Sign in with passphrase</Text>
+            <Text style={styles.link}>  {t("Auth.signInWithPassphrase")}</Text>
           </TouchableOpacity>
         </Text>
       )}

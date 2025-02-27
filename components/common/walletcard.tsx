@@ -10,6 +10,7 @@ import {
 // import { useTranslations } from "next-intl";
 import SvgUri from 'react-native-svg-uri';
 import Navbar from './navbar';
+import { t } from 'i18next';
 
 export function WalletCard({refrealCode, totalValue}) {
   //   const t = useTranslations("Wallet");
@@ -38,7 +39,7 @@ export function WalletCard({refrealCode, totalValue}) {
       <View style={styles.cardBackground}>
         <View style={styles.walletContent}>
           <View style={styles.texticon}>
-            <Text style={styles.walletTitle}>My Wallet</Text>
+            <Text style={styles.walletTitle}>{t("Wallet.yourBalance")}</Text>
             <TouchableOpacity>
               <Image
                 source={require('../../assets/img/coin_plain.png')}
@@ -57,7 +58,7 @@ export function WalletCard({refrealCode, totalValue}) {
           </View>
 
           <View style={styles.referralSection}>
-            <Text style={styles.referralLabel}>Your Referral Code</Text>
+            <Text style={styles.referralLabel}>{t("Wallet.yourReferralCode")}</Text>
             <View style={styles.referralCodeContainer}>
               <Text style={styles.referralCode}>
                 {refrealCode}

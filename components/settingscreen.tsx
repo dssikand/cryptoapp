@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import { Info } from "lucide-react-native";
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView , Image, Platform} from "react-native";
@@ -13,12 +14,12 @@ const SettingScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-            <Text style={styles.Toptext}>Settings</Text>
+            <Text style={styles.Toptext}>{t("Common.settings")}</Text>
 
       
       {/* Sidebar Buttons */}
       <View style={styles.sidebar}>
-  {[ "Recovery Password", "Delete Account"].map((section) => (
+  {[ t("Account.recoveryPassword"), t("Account.deleteAccount")].map((section) => (
     <TouchableOpacity
       key={section}
       style={[styles.button, activeSection === section && styles.activeButton]}
@@ -51,7 +52,7 @@ const RecoveryPassword = () => (
         {/* Header Section */}
         <View>
         <View style={styles.betweenText}>
-          <Text style={styles.headerText}>Recovery Password</Text>
+          <Text style={styles.headerText}>{t("Account.recoveryPassword")}</Text>
           <View style={styles.iconWrapper}>
             <Info size={20} color="#E03000" />
           </View>

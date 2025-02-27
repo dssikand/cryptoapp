@@ -17,6 +17,7 @@ import {WalletCard} from './common/walletcard';
 import {useNavigation} from '@react-navigation/native';
 import Navbar from './common/navbar';
 import {GetUser} from '../utils/common';
+import { t } from 'i18next';
 
 export function WalletScreen() {
   const navigation = useNavigation();
@@ -63,7 +64,7 @@ export function WalletScreen() {
 
         {/* Activity Section with Bounce Animation */}
         <View style={styles.containercard}>
-          {['Mined Coins', 'Rewards'].map((activity, index) => (
+          {[t("Wallet.minedCoins"), t("Wallet.referralsBonus")].map((activity, index) => (
             <Animatable.View
               key={activity}
               animation="bounceIn"

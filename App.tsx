@@ -30,6 +30,8 @@ import ObjectiveScreen from './components/objectivescreen';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import "./i18n"; // Import i18n config
+import { useTranslation } from 'react-i18next';
 // Create Navigators
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -37,21 +39,22 @@ const Drawer = createDrawerNavigator();
 const queryClient = new QueryClient();
 // ✅ Bottom Tab Navigator (Only for Logged-in Users)
 function BottomTabs() {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
         tabBarIcon: ({focused}) => {
           let iconName;
-          if (route.name === 'Wallet') {
-            iconName = <Wallet color={focused ? '#ff922b' : '#adb5bd'} />;
-          } else if (route.name === 'Mining') {
-            iconName = <Pickaxe color={focused ? '#ff922b' : '#adb5bd'} />;
-          } else if (route.name === 'Leader') {
-            iconName = <Building2 color={focused ? '#ff922b' : '#adb5bd'} />;
-          } else if (route.name === 'Announcement') {
-            iconName = <Bell color={focused ? '#ff922b' : '#adb5bd'} />;
-          } else if (route.name === 'Account') {
-            iconName = <Settings color={focused ? '#ff922b' : '#adb5bd'} />;
+         if (route.name === 'Wallet'|| route.name==="钱包") {
+            iconName = <Wallet color={focused ? "#ff922b" : "#adb5bd"} />;
+          } else if (route.name === 'Mining'|| route.name==="挖矿") {
+            iconName = <Pickaxe color={focused ? "#ff922b" : "#adb5bd"} />;
+          } else if (route.name === 'Leader Board'|| route.name==="排行榜") {
+            iconName = <Building2 color={focused ? "#ff922b" : "#adb5bd"} />;
+          } else if (route.name === 'Announcement'|| route.name==="公告") {
+            iconName = <Bell color={focused ? "#ff922b" : "#adb5bd"} />;
+          } else if (route.name === 'My Account'|| route.name==="我的账户") {
+            iconName = <Settings color={focused ? "#ff922b" : "#adb5bd"} />;
           }
           return <Text>{iconName}</Text>;
         },
@@ -59,12 +62,14 @@ function BottomTabs() {
         tabBarInactiveTintColor: 'gray',
         tabBarStyle: {backgroundColor: '#1a1b1e', paddingBottom: 5},
         headerShown: false,
-      })}>
-      <Tab.Screen name="Wallet" component={WalletScreen} />
-      <Tab.Screen name="Mining" component={MiningScreen} />
-      <Tab.Screen name="Leader" component={LeaderboardScreen} />
-      <Tab.Screen name="Announcement" component={AnnouncemntScreen} />
-      <Tab.Screen name="Account" component={SettingScreen} />
+      })}
+    >
+      
+      <Tab.Screen name={t("Common.wallet")} component={WalletScreen} />
+      <Tab.Screen name={t("Common.mining")} component={MiningScreen} />
+      <Tab.Screen name={t("Common.leader")} component={LeaderboardScreen} />
+      <Tab.Screen name={t("Common.announcement")} component={AnnouncemntScreen} />
+      <Tab.Screen name={t("Common.Account")} component={SettingScreen} />
     </Tab.Navigator>
   );
 }

@@ -12,6 +12,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
+import { t } from 'i18next';
 
 interface SignInPassphraseStepProps {
   value: string;
@@ -32,17 +33,16 @@ export default function ReferalCode({
     <View style={styles.container}>
       <View style={styles.box}>
         <TouchableOpacity style={styles.skipButton }  onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Wallet"}}})} >
-          <Text style={styles.skipText}>Skip</Text>
+          <Text style={styles.skipText}>   {t("Account.skip")}</Text>
         </TouchableOpacity>
 
-        <Text style={styles.title}>Referral Code</Text>
+        <Text style={styles.title}>{t("Common.referralCode")}</Text>
         <Text style={styles.description}>
-          Enter the <Text style={styles.highlight}>referral code</Text> of the
-          person who referred you.
+        {t("Account.enterReferralCode.intro1")}<Text style={styles.highlight}>{t("Account.enterReferralCode.intro2")}</Text> {t("Account.enterReferralCode.intro3")}.
         </Text>
         <Text style={styles.description}>
-          Sign up by referral entitles you to a{' '}
-          <Text style={styles.highlight}>20 Qoyn instant bonus</Text>.
+        {t("Account.signUpByReferral.intro1")}
+          <Text style={styles.highlight}>{t("Account.signUpByReferral.intro2")}</Text>.
         </Text>
 
         <View style={styles.inputContainer}>
@@ -57,7 +57,7 @@ export default function ReferalCode({
         <TouchableOpacity
           style={styles.submitButton}
           onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Wallet"}}})} >
-          <Text style={styles.submitText}>Submit Code</Text>
+          <Text style={styles.submitText}>{t("Account.submitCode")}</Text>
         </TouchableOpacity>
       </View>
     </View>
