@@ -56,3 +56,49 @@ export const SubmitCode = async params => {
     return e.response;
   }
 };
+export const LeaderBoard = async params => {
+  
+  try {
+    const {data} = await Base_URL.get(
+      '/leaderboard',
+      params,
+    );
+    return data;
+  } catch (e) {
+    return e.response;
+  }
+};
+export const FetchAnnouncement = async params => {
+  
+  try {
+    const {data} = await Base_URL.get(
+      '/announcement?page=1&limit=10',
+      params,
+    );
+    return data;
+  } catch (e) {
+    return e.response;
+  }
+};
+export const UserRegister = async params => {
+  
+  try {
+    const {data} = await Base_URL.post(
+      '/user/me/finalize-registration',
+      params,
+    );
+    console.log(data)
+    return data;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const checkReferalCode = async params => {
+  try{
+    const {data} = await Base_URL.post("/user/check-referral-code", params);
+    return data
+  }catch(e){
+    return e.response
+  }
+}

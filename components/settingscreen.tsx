@@ -1,20 +1,34 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { t } from "i18next";
 import { Info } from "lucide-react-native";
-import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView , Image, Platform} from "react-native";
+import React, { useState ,useEffect} from "react";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView , Image, Platform, Modal, Clipboard, GestureResponderEvent} from "react-native";
 import { responsiveWidth } from "react-native-responsive-dimensions";
 import Svg, { Path } from "react-native-svg";
-const SettingScreen = () => {
+import RecoveryModal from "./common/recoveverymodal";
+import Toast from "react-native-toast-message";
+import passphrase from "./common/auth/passphrase";
+export default function SettingScreen() {
+   
   const [activeSection, setActiveSection] = useState("Recovery Password");
+  
   const [userData, setUserData] = useState({
     name: "John Doe",
     email: "john.doe@example.com",
     phone: "+1234567890",
   });
-
+  const [modalVisible, setModalVisible] = useState(false);
+ const [recoveryphase,setRecoveryPhase]=useState("")
+ useEffect(() => {
+    async function setRecoveryphase() {
+      const recoveryphase = await AsyncStorage.getItem("passphrase");
+      setRecoveryPhase(recoveryphase);
+    }
+    setRecoveryphase();
+  }, );
   return (
     <ScrollView style={styles.container}>
-            <Text style={styles.Toptext}>{t("Common.settings")}</Text>
+      <Text style={styles.Toptext}>{t("Common.settings")}</Text>
 
       
       {/* Sidebar Buttons */}
@@ -35,7 +49,7 @@ const SettingScreen = () => {
 
       {/* Render Content Based on Active Section */}
       <View style={styles.profileContainer}>
-        {activeSection === "Recovery Password" && <RecoveryPassword />}
+        {activeSection === "Recovery Password" && <RecoveryPassword phrase={recoveryphase}/>}
         {activeSection === "Delete Account" && <DeleteAccount />}
       </View>
     </ScrollView>
@@ -46,7 +60,18 @@ const SettingScreen = () => {
 
 
 // **Recovery Password Component**
-const RecoveryPassword = () => (
+const RecoveryPassword = ({phrase}) => {
+  
+  const copyToClipboard = (text) => {
+    Clipboard.setString(text);
+    Toast.show({
+      type:"success",
+      text1:"Passphrase copied",
+      position:"top"
+    });
+  };
+  return(
+
   <>
   <View style={styles.card}>
         {/* Header Section */}
@@ -64,10 +89,13 @@ const RecoveryPassword = () => (
 
         <View style={styles.recoveryBox}>
           <Text style={styles.recoveryText}>
-            believe visit cross call onion length sponsor hood bulk essay auction dog
+           {phrase}
           </Text>
         </View>
-        <TouchableOpacity style={styles.copyButton}>
+        <TouchableOpacity style={styles.copyButton}  onPress={async () => {
+            copyToClipboard(phrase)
+            await AsyncStorage.setItem("passphrase",phrase.join(' '))
+          }}>
           <Text style={styles.copyButtonText}>Copy</Text>
         </TouchableOpacity>
       </View>
@@ -79,12 +107,35 @@ const RecoveryPassword = () => (
             Permanently hide your recovery password on this device.
           </Text>
         </View>
-        <TouchableOpacity style={styles.hideButton}>
+        <TouchableOpacity style={styles.hideButton}  >
           <Text style={styles.hideButtonText}>Hide</Text>
         </TouchableOpacity>
       </View>
+      {/* <Modal animationType="slide" transparent={true} visible={modalVisible}>
+      <View style={styles.container}>
+      <Text style={styles.title}>Hide Recovery Password Permanently</Text>
+      <Text style={styles.description}>
+        Without your recovery password, you cannot load your account on new devices.
+      </Text>
+      <Text style={styles.description}>
+        We strongly recommend you save your recovery password in a safe and secure place before continuing.
+      </Text>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.continueButton} onPress={onContinue}>
+          <Text style={styles.continueText}>Continue</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
+          <Text style={styles.cancelText}>Cancel</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+            </Modal> */}
+
+            {/* <RecoveryModal visible={undefined} onContinue={undefined} onCancel={() => setModalVisible(false)}/> */}
       </>
-);
+)};
 
 // **Delete Account Component**
 const DeleteAccount = () => (
@@ -94,6 +145,7 @@ const DeleteAccount = () => (
       <Text style={styles.deleteButtonText}>Delete My Account</Text>
     </TouchableOpacity>
   </View>
+  
 );
 
 // **Editable Profile Field Component**
@@ -123,6 +175,8 @@ const ProfileField = ({ label, value, onChange }: any) => {
         </TouchableOpacity>
       </View>
     </View>
+          
+    
   );
 };
 
@@ -350,6 +404,58 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign:"center"
   },
+  container: {
+    backgroundColor: '#1A1B1E',
+    borderRadius: 16,
+    padding: 24,
+    maxWidth: 400,
+    width: '90%',
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(153, 27, 27, 0.3)',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 8,
+  },
+  description: {
+    color: '#9CA3AF',
+    fontSize: 14,
+    marginBottom: 8,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 10,
+    paddingTop: 16,
+  },
+  continueButton: {
+    flex: 1,
+    backgroundColor: '#EF4444',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  continueText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  cancelButton: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#4B5563',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    backgroundColor: '#1F2937',
+  },
+  cancelText: {
+    color: '#D1D5DB',
+  },
+
 });
 
-export default SettingScreen;
+
+
+

@@ -3,8 +3,26 @@ import { View, Text, Image, StyleSheet, ImageBackground, ScrollView } from 'reac
 import { responsiveWidth, responsiveHeight } from 'react-native-responsive-dimensions';
 import Navbar from './common/navbar';
 import { t } from 'i18next';
-
+import { useQuery } from '@tanstack/react-query';
+import { FetchAnnouncement } from '../services/user.services';
+import CommonLoader from './common/commonloader';
+import { compareAsc, format } from "date-fns";
 const AnnouncemntScreen = () => {
+  
+  const dates = [
+    new Date(1995, 6, 2),
+    new Date(1987, 1, 11),
+    new Date(1989, 6, 10),
+  ];
+  const {data, isLoading} = useQuery({
+    queryFn: FetchAnnouncement,
+    queryKey:['FETCH_ANNOUNCEMENT']
+  }) 
+  if(isLoading){
+    return <CommonLoader/>
+
+  }
+
   return (
     <ImageBackground 
       source={require("../assets/img/crypt.jpeg")} // Background Image
@@ -19,47 +37,34 @@ const AnnouncemntScreen = () => {
         contentContainerStyle={styles.scrollContainer} 
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.card}>
+        {
+          data.data.map((item)=>  
+            <View style={styles.card}>
           <Image 
-            source={{ uri: 'https://cdn.pixabay.com/photo/2018/03/31/05/07/blockchain-3277336_1280.png' }}
+            source={{ uri:item.imgUrl}}
             style={styles.image}
           />
           <View style={styles.content}>
-            <Text style={styles.title}>Qoyn Beta Launch</Text>
+            <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.description}>
-              Qoyn is a cutting-edge cryptocurrency designed to simplify and revolutionize digital transactions.
-              During the beta phase, we’re inviting early users to explore, provide feedback, and help shape the future of Qoyn.
-              Join us on this journey to redefine the crypto experience!
+            {item.content}
             </Text>
             <View style={styles.tagContainer}>
-              <Text style={styles.tag}>feature</Text>
-              <Text style={styles.tag}>launch</Text>
-              <Text style={styles.tag}>update</Text>
+             {
+              item.tags.map((item)=>
+                <Text style={styles.tag}>{item}</Text>
+            ) } 
+            
             </View>
-            <Text style={styles.date}>1st January 2025</Text>
+            <Text style={styles.date}>{format(new Date(item.createdAt), "dd MMM yyyy")} </Text>
           </View>
-        </View>
+        </View>)
+
+     
+}
 
         {/* Add More Cards to Test Scrolling */}
-        <View style={styles.card}>
-        <Image 
-            source={{ uri: 'https://cdn.pixabay.com/photo/2018/03/31/05/07/blockchain-3277336_1280.png' }}
-            style={styles.image}
-          />
-          <View style={styles.content}>
-            <Text style={styles.title}>New Feature Coming Soon!</Text>
-            <Text style={styles.description}>
-              We are excited to announce new improvements to the Qoyn platform, including enhanced security and faster transactions.
-              Stay tuned for more updates!
-            </Text>
-            <View style={styles.tagContainer}>
-              <Text style={styles.tag}>security</Text>
-              <Text style={styles.tag}>update</Text>
-              <Text style={styles.tag}>news</Text>
-            </View>
-            <Text style={styles.date}>5th February 2025</Text>
-          </View>
-        </View>
+      
       </ScrollView>
     </ImageBackground>
   );

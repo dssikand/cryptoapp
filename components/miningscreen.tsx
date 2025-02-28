@@ -26,6 +26,7 @@ import { Copy, SquareCheck } from 'lucide-react-native';
 import { useQuery } from '@tanstack/react-query';
 import { ActiveUser, CurrentUser } from '../services/user.services';
 import { t } from 'i18next';
+import CommonLoader from './common/commonloader';
 
 const MiningScreen = () => {
   const navigation = useNavigation();
@@ -42,9 +43,7 @@ const MiningScreen = () => {
     queryFn: CurrentUser,
     queryKey:['CURRENT_USER']
   }) 
-  const referalcode=!isLoading ? data.data.referralCode :''
-  const totalvalue= !isLoading ? data?.data?.totalValue?.referralBonus + data?.data?.totalValue?.referralsMiningCodeSum + data?.data?.totalValue?.userMiningCodeSum :0
-  console.log(totalvalue);
+   console.log(totalvalue);
   
   
   useEffect(() => {
@@ -66,9 +65,14 @@ const MiningScreen = () => {
       useNativeDriver: true,
     }).start();
   }, []);
-  if(!isLoading){
+  if(isLoading){
+    return <CommonLoader/>
+
     console.log(data.data,"data")
   }
+  const referalcode= data.data.referralCode 
+  const totalvalue=  data?.data?.totalValue?.referralBonus + data?.data?.totalValue?.referralsMiningCodeSum + data?.data?.totalValue?.userMiningCodeSum 
+ 
   return (
     <ImageBackground
       source={require('../assets/img/crypt.jpeg')} // Change to your image path
@@ -139,7 +143,7 @@ const MiningScreen = () => {
                   <Text style={styles.balanceText}>{t("Wallet.myWallet")}</Text>
                   <View style={styles.balanceAmount}>
                     <Text style={styles.currency}>QYN</Text>
-                    <Text style={styles.amount}>0</Text>
+                    <Text style={styles.amount}>{totalvalue}</Text>
                     <Text style={styles.decimal}>.00</Text>
                   </View>
                 </View>

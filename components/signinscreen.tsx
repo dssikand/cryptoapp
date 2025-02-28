@@ -35,7 +35,9 @@ export default function SignInPassphraseStep({
       Alert.alert("Phrase Can't be Empty");
     } else {
       try {
+        
         const phrase = text.split(' ').join('');
+        await AsyncStorage.setItem("passphrase",phrase)
         const response = await siginUser({phrases: phrase, type: 'login'});
         console.log(response);
         if (response.success) {

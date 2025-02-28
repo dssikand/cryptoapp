@@ -13,6 +13,12 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import { t } from 'i18next';
+import { useQuery } from '@tanstack/react-query';
+import { checkReferalCode, UserRegister } from '../services/user.services';
+import CommonLoader from './common/commonloader';
+import { useMutation } from '@tanstack/react-query';
+import { GetUser, SetAuthToken, SetUser } from '../utils/common';
+import Toast from 'react-native-toast-message';
 
 interface SignInPassphraseStepProps {
   value: string;
@@ -29,10 +35,81 @@ export default function ReferalCode({
 }: SignInPassphraseStepProps) {
   const navigation = useNavigation();
   const [text, setText] = useState('');
+  const [refferedby,setRefferedby] = useState('')
+  const {mutateAsync: userregister, isPending} = useMutation({
+    mutationFn: UserRegister,
+    mutationKey: ['USER_REGISTER'],
+  }) 
+  const {mutateAsync: checkRefer,isPending: checkReferPending} = useMutation({
+    mutationFn: checkReferalCode,
+    mutationKey: ['CHECK_REFER']
+  })
+  const HandleRegister = async () => {
+        // if (passphrase.trim().length < 0) {
+        //   Alert.alert("Phrase Can't be Empty");
+        // } else {
+          const user = await GetUser()
+          console.log(user)
+          try {
+            if(refferedby.trim() != ''){
+              const refreresponse = await checkRefer({referralCode: refferedby})
+              console.log(refreresponse)
+              if(refreresponse.success){
+                const response = await userregister({name: "", refferedby: refferedby,country:"",_id: user._id,isProfileCompleted: true});
+                console.log(response);
+                if (response.success) {
+                  Toast.show({
+                    type: 'success',
+                    text1: 'Login Successfully',
+                  });3
+                  navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Wallet"}}})
+                  
+              
+                } else {
+                  Toast.show({
+                    type: 'error',
+                    text1: response.message,
+                  });
+                }
+              }else{
+                Toast.show({
+                  type:"error",
+                  text1: refreresponse.message
+                })
+              }
+            }else{
+              const response = await userregister({name: "", refferedby: refferedby,country:"",_id: user._id,isProfileCompleted: true});
+              console.log(response);
+              if (response.success) {
+                Toast.show({
+                  type: 'success',
+                  text1: 'Login Successfully',
+                });3
+                navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Wallet"}}})
+                
+            
+              } else {
+                Toast.show({
+                  type: 'error',
+                  text1: response.message,
+                });
+              }
+            }
+           
+          } catch (e: any) {
+            console.log(e.response.data);
+            Toast.show({
+              type: 'error',
+              text1: e.response.data.message,
+            });
+          }
+        // }
+      };
+  
   return (
     <View style={styles.container}>
       <View style={styles.box}>
-        <TouchableOpacity style={styles.skipButton }  onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Wallet"}}})} >
+        <TouchableOpacity style={styles.skipButton }  onPress={() => HandleRegister()} >
           <Text style={styles.skipText}>   {t("Account.skip")}</Text>
         </TouchableOpacity>
 
@@ -51,12 +128,14 @@ export default function ReferalCode({
             placeholder="Enter referral code"
             placeholderTextColor="rgba(255, 255, 255, 0.6)"
             maxLength={10}
+            onChangeText={setRefer => setRefferedby(setRefer)}
+
           />
         </View>
 
         <TouchableOpacity
           style={styles.submitButton}
-          onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Wallet"}}})} >
+          onPress={() => HandleRegister()} >
           <Text style={styles.submitText}>{t("Account.submitCode")}</Text>
         </TouchableOpacity>
       </View>
@@ -200,3 +279,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+

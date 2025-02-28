@@ -9,18 +9,23 @@ import {
   ActivityIndicator,
   Clipboard,
   Modal,
+  Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 // import Modal from "react-native-modal"
 import {Copy, ChevronDown, ChevronUp} from 'lucide-react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {USFlag} from '../../../utils/common';
+import {SetAuthToken, SetUser, USFlag} from '../../../utils/common';
 import {
   responsiveWidth,
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
 import i18n from '../../../i18n';
 import { t } from 'i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
+import { useMutation } from '@tanstack/react-query';
+import { SignInUser } from '../../../services/user.services';
 const languages = [
   {value: 'en', label: 'ENG'},
   {value: 'cn', label: '中文'},
@@ -42,9 +47,17 @@ export default function PassphraseGenerator({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const navigation = useNavigation();
-  const copyToClipboard = () => {
+  const {mutateAsync: siginUser, isPending} = useMutation({
+    mutationFn: SignInUser,
+    mutationKey: ['SIGN_USER'],
+  });
+  const copyToClipboard = (text: string) => {
     Clipboard.setString(text);
-    Alert.alert('Copied!', 'Text copied to clipboard');
+    Toast.show({
+      type:"success",
+      text1:"Recovery password copied",
+      position:"top"
+    });
   };
   const items = [
     {label: 'English', value: 'en'},
@@ -82,13 +95,45 @@ export default function PassphraseGenerator({
       }
 
       setPassphrase(selectedWords);
+      console.log(selectedWords)
     } catch (error) {
       console.error('Error generating passphrase:', error);
     } finally {
       setIsLoading(false);
     }
   }, [language]);
-
+  const HandleSignup = async () => {
+      // if (passphrase.trim().length < 0) {
+      //   Alert.alert("Phrase Can't be Empty");
+      // } else {
+        try {
+          console.log(passphrase.join(''))
+          const phrase = passphrase.join('');
+          const response = await siginUser({phrases: phrase, type: 'register'});
+          console.log(response);
+          if (response.success) {
+            Toast.show({
+              type: 'success',
+              text1: 'Login Successfully',
+            });3
+            navigation.navigate("ReferalCode")
+            SetAuthToken(response.token);
+            SetUser(response.data);
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: response.message,
+            });
+          }
+        } catch (e: any) {
+          console.log(e.response.data);
+          Toast.show({
+            type: 'error',
+            text1: e.response.data.message,
+          });
+        }
+      // }
+    };
   useEffect(() => {
     generatePassphrase();
   }, [generatePassphrase]);
@@ -138,8 +183,9 @@ export default function PassphraseGenerator({
 
         <TouchableOpacity
           style={styles.copyButton}
-          onPress={() => {
-            Clipboard.setString(passphrase.join(' '));
+          onPress={async () => {
+            copyToClipboard(passphrase.join())
+            await AsyncStorage.setItem("passphrase",passphrase.join(' '))
           }}>
           <Text style={styles.copyText}>
            {t("Auth.passphraseGenerator.copyAllWords")}
@@ -173,8 +219,7 @@ export default function PassphraseGenerator({
 
               <TouchableOpacity
                 style={styles.yesbtn}
-                onPress={() =>
-                  navigation.navigate("ReferalCode")}
+                onPress={() =>HandleSignup()}
                 
                 >
                 <Text style={styles.yesbtntext}> {t("Auth.confirmationModal.yes")} </Text>
@@ -409,3 +454,5 @@ const styles = StyleSheet.create({
   },
   yesbtntext: {},
 });
+
+

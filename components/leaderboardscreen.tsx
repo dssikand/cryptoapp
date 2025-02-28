@@ -16,6 +16,9 @@ import {
 } from 'react-native-responsive-dimensions';
 import Navbar from './common/navbar';
 import { t } from 'i18next';
+import { useQuery } from '@tanstack/react-query';
+import {  LeaderBoard } from '../services/user.services';
+import CommonLoader from './common/commonloader';
 
 const leaderboardData = [
   {id: '1', rank: 1, username: 'backy6666', coins: '25.20'},
@@ -31,7 +34,12 @@ const LeaderboardScreen = () => {
   const animations = useRef(
     leaderboardData.map(() => new Animated.Value(0)),
   ).current;
+  const {data, isLoading} = useQuery({
+    queryFn: LeaderBoard,
+    queryKey:['LEADER_BOARD']
+  }) 
 
+  console.log(data);
   useEffect(() => {
     animations.forEach((anim, index) => {
       Animated.timing(anim, {
@@ -50,14 +58,14 @@ const LeaderboardScreen = () => {
           styles.animatedContainer,
           {
             opacity: animations[index],
-            transform: [
-              {
-                translateY: animations[index].interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [50, 0],
-                }),
-              },
-            ],
+            // transform: [
+            //   {
+            //     translateY: animations.interpolate({
+            //       inputRange: [0, 1],
+            //       outputRange: [50, 0],
+            //     }),
+            //   },
+            // ],
           },
         ]}>
         <Pressable>
@@ -80,18 +88,18 @@ const LeaderboardScreen = () => {
                     <LinearGradient
                       colors={['#F06400', '#FFBF6E']}
                       style={styles.rankCircle}>
-                      <Text style={styles.numberText}>{item.rank}</Text>
+                      <Text style={styles.numberText}>{index+1}</Text>
                     </LinearGradient>
                   </View>
                 </View>
                 <View style={styles.userContainer}>
                   <Text style={styles.username}>{t("LeaderBoard.user")}</Text>
-                  <Text style={styles.coins}>{item.username}</Text>
+                  <Text style={styles.coins}>{item.name}</Text>
                 </View>
                 <View style={styles.userContainer}>
                   <Text style={styles.username}>{t("LeaderBoard.totalCoins")}</Text>
                   <Text style={styles.coins}>
-                    {item.coins}
+                    {item.total}
                     <Text style={styles.coinsDecimal}>.00</Text>
                   </Text>
                 </View>
@@ -102,7 +110,10 @@ const LeaderboardScreen = () => {
       </Animated.View>
     );
   };
+  if(isLoading){
+    return <CommonLoader/>
 
+  }
   return (
     <>
       <Navbar />
@@ -115,7 +126,7 @@ const LeaderboardScreen = () => {
         {/* Ensuring Full-Height View for FlatList */}
         <View style={styles.bg}>
           <FlatList
-            data={leaderboardData}
+            data={data.data}
             keyExtractor={item => item.id}
             renderItem={renderItem}
             showsVerticalScrollIndicator={true} // Enable vertical scrolling indicator
