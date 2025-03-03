@@ -36,8 +36,8 @@ const LeaderboardScreen = () => {
   ).current;
   const {data, isLoading} = useQuery({
     queryFn: LeaderBoard,
-    queryKey:['LEADER_BOARD']
-  }) 
+    queryKey: ['LEADER_BOARD'],
+  });
 
   console.log(data);
   useEffect(() => {
@@ -79,25 +79,50 @@ const LeaderboardScreen = () => {
                 style={{
                   padding: Platform.OS == 'ios' ? 10 : 0,
                 }}>
-                <View style={styles.rankContainer}>
-                  <Text style={styles.rankText}>{t("LeaderBoard.rank")}</Text>
-                  <View
-                    style={{
-                      padding: 10,
-                    }}>
-                    <LinearGradient
-                      colors={['#F06400', '#FFBF6E']}
-                      style={styles.rankCircle}>
-                      <Text style={styles.numberText}>{index+1}</Text>
-                    </LinearGradient>
+                {Platform.OS == 'ios' ? (
+                  <View style={styles.userContainer}>
+                    <View>
+                      <Text style={styles.username}>
+                        {t('LeaderBoard.rank')}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        backgroundColor: '#d9480f',
+                        width: 30,
+                        height: 30,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 50,
+                      }}>
+                      <Text style={styles.coins}>{index + 1}</Text>
+                    </View>
                   </View>
-                </View>
+                ) : (
+                  <View style={styles.rankContainer}>
+                    <Text style={styles.rankText}>{t('LeaderBoard.rank')}</Text>
+                    <View
+                      style={{
+                        padding: 10,
+                      }}>
+                      <LinearGradient
+                        colors={['#F06400', '#FFBF6E']}
+                        style={styles.rankCircle}>
+                        <Text style={styles.numberText}>{index + 1}</Text>
+                      </LinearGradient>
+                    </View>
+                  </View>
+                )}
+
                 <View style={styles.userContainer}>
-                  <Text style={styles.username}>{t("LeaderBoard.user")}</Text>
+                  <Text style={styles.username}>{t('LeaderBoard.user')}</Text>
+
                   <Text style={styles.coins}>{item.name}</Text>
                 </View>
                 <View style={styles.userContainer}>
-                  <Text style={styles.username}>{t("LeaderBoard.totalCoins")}</Text>
+                  <Text style={styles.username}>
+                    {t('LeaderBoard.totalCoins')}
+                  </Text>
                   <Text style={styles.coins}>
                     {item.total}
                     <Text style={styles.coinsDecimal}>.00</Text>
@@ -110,9 +135,8 @@ const LeaderboardScreen = () => {
       </Animated.View>
     );
   };
-  if(isLoading){
-    return <CommonLoader/>
-
+  if (isLoading) {
+    return <CommonLoader />;
   }
   return (
     <>
@@ -121,7 +145,7 @@ const LeaderboardScreen = () => {
         source={require('../assets/img/crypt.jpeg')}
         style={styles.background}
         resizeMode="cover">
-        <Text style={styles.Toptext}>{t("Common.leader")}</Text>
+        <Text style={styles.Toptext}>{t('Common.leader')}</Text>
 
         {/* Ensuring Full-Height View for FlatList */}
         <View style={styles.bg}>
@@ -168,11 +192,13 @@ const styles = StyleSheet.create({
   },
   rankContainer: {
     height: 32,
+    flex: 1,
     borderRadius: 16,
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    margin: Platform.OS == 'ios' ? 10 : 0,
+    // margin: Platform.OS == 'ios' ? 10 : 0,
+    width: Platform.OS == 'ios' ? responsiveWidth(100) : responsiveWidth(100),
   },
   userContainer: {
     height: 32,
@@ -181,12 +207,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  circlediv: {
+    // position: Platform.OS == 'ios' ? 'absolute' : 'relative',
+    // left: Platform.OS == 'ios' ? -50 : 0,
+  },
   rankCircle: {
     width: 30,
     height: 30,
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
+    position: Platform.OS == 'ios' ? 'absolute' : 'relative',
   },
   rankText: {
     fontSize: 14,

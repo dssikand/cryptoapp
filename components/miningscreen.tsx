@@ -10,7 +10,9 @@ import {
   TextInput,
   ImageBackground,
   Animated,
-  Easing,Linking
+  Easing,
+  Linking,
+  Clipboard,
 } from 'react-native';
 import Svg, {Path} from 'react-native-svg';
 import LinearGradient from 'react-native-linear-gradient';
@@ -22,11 +24,12 @@ import {
 import CanvasQ from './common/canvasq';
 import {useNavigation} from '@react-navigation/native';
 import Navbar from './common/navbar';
-import { Copy, SquareCheck } from 'lucide-react-native';
-import { useQuery } from '@tanstack/react-query';
-import { ActiveUser, CurrentUser } from '../services/user.services';
-import { t } from 'i18next';
+import {Copy, SquareCheck} from 'lucide-react-native';
+import {useQuery} from '@tanstack/react-query';
+import {ActiveUser, CurrentUser} from '../services/user.services';
+import {t} from 'i18next';
 import CommonLoader from './common/commonloader';
+import Toast from 'react-native-toast-message';
 
 const MiningScreen = () => {
   const navigation = useNavigation();
@@ -38,20 +41,25 @@ const MiningScreen = () => {
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
-  const coolDownTime = 5 * 60 * 1000; 
+  const coolDownTime = 5 * 60 * 1000;
   const [loading, setLoading] = useState(false);
 
-  const { userData, updateUserData } = useState();
-  const [timeLeft, setTimeLeft] = useState({ minutes: 0, seconds: 0 });
+  const [timeLeft, setTimeLeft] = useState({minutes: 0, seconds: 0});
 
-
-  const outerContentTranslateY = useRef(new Animated.Value(-100)).current; // Start above screen
+  const outerContentTranslateY = useRef(new Animated.Value(-100)).current;
+  const copyToClipboard = (text: string) => {
+    Clipboard.setString(text);
+    Toast.show({
+      type: 'success',
+      text1: 'Referral code copied',
+      position: 'top',
+    });
+  }; // Start above screen
   const {data, isLoading} = useQuery({
     queryFn: CurrentUser,
-    queryKey:['CURRENT_USER']
-  }) 
-  
-  
+    queryKey: ['CURRENT_USER'],
+  });
+
   useEffect(() => {
     // Animate the outer content from top to its position
     Animated.timing(outerContentTranslateY, {
@@ -60,7 +68,7 @@ const MiningScreen = () => {
       easing: Easing.out(Easing.exp), // Smooth easing
       useNativeDriver: true,
     }).start();
-    console.log(data?.data?.lastMingTime)
+    console.log(data?.data?.lastMingTime);
     if (!data?.data?.lastMingTime) {
       // navigation.navigate("mining");
       return;
@@ -77,19 +85,19 @@ const MiningScreen = () => {
 
     const initialMinutes = Math.floor((initialTimeLeft / (1000 * 60)) % 60);
     const initialSeconds = Math.floor((initialTimeLeft / 1000) % 60);
-    setTimeLeft({ minutes: initialMinutes, seconds: initialSeconds });
+    setTimeLeft({minutes: initialMinutes, seconds: initialSeconds});
 
     const timer = setInterval(() => {
-      setTimeLeft((prev) => {
+      setTimeLeft(prev => {
         if (prev.seconds === 0) {
           if (prev.minutes === 0) {
             clearInterval(timer);
             // navigation.navigate("mining");
             return prev;
           }
-          return { minutes: prev.minutes - 1, seconds: 59 };
+          return {minutes: prev.minutes - 1, seconds: 59};
         }
-        return { ...prev, seconds: prev.seconds - 1 };
+        return {...prev, seconds: prev.seconds - 1};
       });
     }, 1000);
 
@@ -106,48 +114,52 @@ const MiningScreen = () => {
       useNativeDriver: true,
     }).start();
   }, []);
-  if(isLoading){
-    return <CommonLoader/>
+  if (isLoading) {
+    return <CommonLoader />;
 
-    console.log(data.data,"data")
+    console.log(data.data, 'data');
   }
-  console.log(timeLeft)
+  console.log(timeLeft);
   const isTimeToStart = !!(timeLeft.minutes === 0 && timeLeft.seconds === 0);
 
-  const referalcode= data.data.referralCode 
-  const totalvalue=  data?.data?.totalValue?.referralBonus + data?.data?.totalValue?.referralsMiningCodeSum + data?.data?.totalValue?.userMiningCodeSum 
- 
+  const referalcode = data.data.referralCode;
+  const totalvalue =
+    data?.data?.totalValue?.referralBonus +
+    data?.data?.totalValue?.referralsMiningCodeSum +
+    data?.data?.totalValue?.userMiningCodeSum;
+
   return (
     <ImageBackground
       source={require('../assets/img/crypt.jpeg')} // Change to your image path
       style={styles.background}
       resizeMode="cover">
-        <Navbar/>
+      <Navbar />
 
       <View style={styles.container}>
-      <Text style={styles.Toptext}>{t("Common.mining")}</Text>
+        <Text style={styles.Toptext}>{t('Common.mining')}</Text>
 
         {/* Image Section */}
         <View style={styles.imageContainer}>
-        <View style={styles.contain}>
-      {/* Timer absolute position adjusted */}
-      {!isTimeToStart && (
-        <View style={[styles.timerContainer]}>
-          <Text style={styles.timerText}>{t("Mining.nextMining")}:</Text>
-        </View>
-      )}
+          <View style={styles.contain}>
+            {/* Timer absolute position adjusted */}
+            {!isTimeToStart && (
+              <View style={[styles.timerContainer]}>
+                <Text style={styles.timerText}>{t('Mining.nextMining')}:</Text>
+              </View>
+            )}
 
-      <CanvasQ />
+            <CanvasQ />
 
-      {/* Timer absolute position adjusted */}
-      {!isTimeToStart && (
-        <View style={[styles.timerContainer2]}>
-          <Text style={styles.countdownText}>
-            {timeLeft.minutes} : {timeLeft.seconds.toString().padStart(2, "0")}
-          </Text>
-        </View>
-      )}
-    </View>
+            {/* Timer absolute position adjusted */}
+            {!isTimeToStart && (
+              <View style={[styles.timerContainer2]}>
+                <Text style={styles.countdownText}>
+                  {timeLeft.minutes} :{' '}
+                  {timeLeft.seconds.toString().padStart(2, '0')}
+                </Text>
+              </View>
+            )}
+          </View>
           {/* <Image
           source={require('../assets/img/coin_color.png')}
           style={styles.coinImage}
@@ -157,17 +169,16 @@ const MiningScreen = () => {
 
         {/* Referral Code Section */}
         <View style={styles.referralSection}>
-          
-          <Text style={styles.referralText}>{t("Common.referralCode")}</Text>
+          <Text style={styles.referralText}>{t('Common.referralCode')}</Text>
           <View style={styles.referralCodeContainer}>
-              <Text style={styles.referralCode}>{referalcode} <Copy color={"white"} size={20} style={styles.iconcopy}/></Text>
-             
-            </View>
-          <View style={styles.codeContainer}>
-            <TouchableOpacity>
-         
-            </TouchableOpacity>
+            <Text style={styles.referralCode}>
+              {referalcode}{' '}
+              <TouchableOpacity onPress={() => copyToClipboard(referalcode)}>
+                <Copy color={'white'} size={20} style={styles.iconcopy} />
+              </TouchableOpacity>
+            </Text>
           </View>
+          <View style={styles.codeContainer}></View>
         </View>
 
         {/* Balance Card Section */}
@@ -190,7 +201,7 @@ const MiningScreen = () => {
               ]}>
               <View style={styles.flexDiv}>
                 <View style={styles.balanceHeader}>
-                  <Text style={styles.balanceText}>{t("Wallet.myWallet")}</Text>
+                  <Text style={styles.balanceText}>{t('Wallet.myWallet')}</Text>
                   <View style={styles.balanceAmount}>
                     <Text style={styles.currency}>QYN</Text>
                     <Text style={styles.amount}>{totalvalue}</Text>
@@ -199,7 +210,9 @@ const MiningScreen = () => {
                 </View>
                 <View style={styles.levelContainer}>
                   <Text style={styles.levelText}>Level 1</Text>
-                  <Text style={styles.levelSubText}>{t("Common.platinum")}</Text>
+                  <Text style={styles.levelSubText}>
+                    {t('Common.platinum')}
+                  </Text>
                 </View>
               </View>
             </Animated.View>
@@ -210,135 +223,26 @@ const MiningScreen = () => {
         <View style={styles.buttonContainer}>
           <Animated.View
             style={[styles.buttonContainer, {transform: [{translateY}]}]}>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Objective")} disabled={!isTimeToStart || loading}>
-            {loading ? (
-              <CommonLoader  />
-            ) : !isTimeToStart ? (
-              <View style={styles.containerbtn}>
-              <Text style={styles.text}>Mining Session starting soon</Text>
-              <Text style={styles.timer}>
-                {timeLeft.minutes} : {timeLeft.seconds.toString().padStart(2, "0")}
-              </Text>
-            </View>
-            ) : (
-              <Text style={styles.buttonText} >
-              {t("Common.continue")}
-              </Text>
-            )}
-           
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('Objective')}
+              disabled={!isTimeToStart || loading}>
+              {loading ? (
+                <CommonLoader />
+              ) : !isTimeToStart ? (
+                <View style={styles.containerbtn}>
+                  <Text style={styles.text}>Mining Session starting soon</Text>
+                  <Text style={styles.timer}>
+                    {timeLeft.minutes} :{' '}
+                    {timeLeft.seconds.toString().padStart(2, '0')}
+                  </Text>
+                </View>
+              ) : (
+                <Text style={styles.buttonText}>{t('Common.continue')}</Text>
+              )}
             </TouchableOpacity>
           </Animated.View>
         </View>
-        <Modal animationType="slide" transparent={true} visible={modalVisible}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Objective</Text>
-              <Text style={styles.modalText2}>
-                Find a string that produces a SHA256 hash starting with
-              </Text>
-              <TouchableOpacity onPress={() => setSeeMoreVisible(!seeMoreVisible)}>
-            <Text style={styles.modalText3}>
-              {seeMoreVisible ? 'See Less' : 'See More'}
-            </Text>
-          </TouchableOpacity>
-          {seeMoreVisible && (
-            <View>
-           <Text style={styles.title}>Conditions</Text>
-
-           {/* Allowed Characters */}
-           <View style={styles.row}>
-             <SquareCheck color={"#ff922b"}/>
-             <View style={styles.textContainer}>
-               <Text style={styles.label}>Allowed Characters:</Text>
-               <Text style={styles.value}>A–Z, a–z, 0–9</Text>
-             </View>
-           </View>
-     
-           {/* Max Length */}
-           <View style={styles.row}>
-             <SquareCheck color={"#ff922b"} />
-             <View style={styles.textContainer}>
-               <Text style={styles.label}>Max Length:</Text>
-               <Text style={styles.value}>70 characters</Text>
-             </View>
-           </View>
-     
-           {/* Prefix */}
-           <View style={styles.row}>
-             <SquareCheck  color={"#ff922b"}/>
-             <View style={styles.textContainer}>
-               <Text style={styles.label}>Prefix:</Text>
-               <View style={styles.copyContainer}>
-                 <Text style={styles.copyText}>7kunusxk16</Text>
-                 <Copy color={"white"} />
-               </View>
-             </View>
-           </View>
-     
-           {/* Suffix */}
-           <View style={styles.row}>
-             <SquareCheck color={"#ff922b"}/>
-             <View style={styles.textContainer}>
-               <Text style={styles.label}>Suffix:</Text>
-               <View style={styles.copyContainer}>
-                 <Text style={styles.copyText}>1234</Text>
-                 <Copy color={"white"}/>
-               </View>
-             </View>
-           </View>
-     
-           {/* Task Description */}
-           <Text style={styles.description}>
-             Your task is to generate a valid string that meets these criteria. 🚀
-           </Text>
-     
-           {/* Reward Section */}
-           <View style={styles.rewardContainer}>
-             <Text style={styles.label}>Reward</Text>
-             <Text style={styles.value}>70</Text>
-             <Text style={styles.label}>Qoyns</Text>
-           </View>
-     
-           {/* Footer */}
-           <View style={styles.footer}>
-             <Text style={styles.footerText}>Good luck mining Qoyn!</Text>
-             <Text style={styles.helpText}>
-               Need help? Use our
-               <TouchableOpacity onPress={openLink}>
-               <Text style={styles.link}> miner.</Text>
-</TouchableOpacity>
-             </Text>
-           </View>
-           </View>
-          )}
-
-
-              <View
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                  padding: 16,
-                  borderRadius: 10,
-                  marginTop: 16,
-                  borderColor: '#FFA500',
-                  borderWidth: 1,
-                }}>
-                <TextInput
-                  placeholder="Enter your solution"
-                  placeholderTextColor="rgba(255, 255, 255, 0.5)"
-                  style={styles.inputText}
-                />
-                <TouchableOpacity
-                  style={styles.submitbtn}
-                  onPress={toggleModal}>
-                  <Text
-                    style={{color: '#fff', fontWeight: 'bold', fontSize: 16}}>
-                    Submit
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
       </View>
     </ImageBackground>
   );

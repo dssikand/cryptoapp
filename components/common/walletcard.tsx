@@ -1,6 +1,13 @@
 import {Copy} from 'lucide-react-native';
 import React from 'react';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Clipboard,
+} from 'react-native';
 import {
   responsiveWidth,
   responsiveHeight,
@@ -11,6 +18,7 @@ import {
 import SvgUri from 'react-native-svg-uri';
 import Navbar from './navbar';
 import { t } from 'i18next';
+import Toast from 'react-native-toast-message';
 
 export function WalletCard({refrealCode, totalValue}) {
   //   const t = useTranslations("Wallet");
@@ -20,7 +28,14 @@ export function WalletCard({refrealCode, totalValue}) {
     totalValue?.referralBonus +
     totalValue?.referralsMiningCodeSum +
     totalValue?.userMiningCodeSum;
-
+  const copyToClipboard = (text: string, message: string) => {
+    Clipboard.setString(text);
+    Toast.show({
+      type: 'success',
+      text1: message,
+      position: 'top',
+    });
+  };
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -39,7 +54,7 @@ export function WalletCard({refrealCode, totalValue}) {
       <View style={styles.cardBackground}>
         <View style={styles.walletContent}>
           <View style={styles.texticon}>
-            <Text style={styles.walletTitle}>{t("Wallet.yourBalance")}</Text>
+            <Text style={styles.walletTitle}>{t('Wallet.yourBalance')}</Text>
             <TouchableOpacity>
               <Image
                 source={require('../../assets/img/coin_plain.png')}
@@ -58,11 +73,18 @@ export function WalletCard({refrealCode, totalValue}) {
           </View>
 
           <View style={styles.referralSection}>
-            <Text style={styles.referralLabel}>{t("Wallet.yourReferralCode")}</Text>
+            <Text style={styles.referralLabel}>
+              {t('Wallet.yourReferralCode')}
+            </Text>
             <View style={styles.referralCodeContainer}>
               <Text style={styles.referralCode}>
                 {refrealCode}
-                <Copy color={'white'} size={20} style={styles.iconcopy} />
+                <TouchableOpacity
+                  onPress={() =>
+                    copyToClipboard(refrealCode, 'Referral Code Copied')
+                  }>
+                  <Copy color={'white'} />
+                </TouchableOpacity>
               </Text>
             </View>
           </View>

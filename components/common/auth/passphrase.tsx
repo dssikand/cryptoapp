@@ -57,7 +57,7 @@ export default function PassphraseGenerator({
     Clipboard.setString(text);
     Toast.show({
       type:"success",
-      text1:"Recovery password copied",
+      text1:"Phrase password copied",
       position:"top"
     });
   };
@@ -121,11 +121,13 @@ export default function PassphraseGenerator({
             navigation.navigate("ReferalCode",{token: response.token})
             // login(response.token);
             SetUser(response.data);
+            setModalVisible(false);
           } else {
             Toast.show({
               type: 'error',
               text1: response.message,
             });
+            setModalVisible(false);
           }
         } catch (e: any) {
           console.log(e.response.data);

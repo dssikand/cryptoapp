@@ -19,42 +19,79 @@ const CustomDrawer = (props) => {
   const navigation = useNavigation();
   const {logout} = useContext(AuthContext)
   return (
-    <DrawerContentScrollView {...props} contentContainerStyle={styles.container}>
+    <DrawerContentScrollView
+      {...props}
+      contentContainerStyle={styles.container}>
       {/* Menu Items */}
       <View style={styles.menuItems}>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Wallet"}}})}>
-          <Wallet color={"#fff"} />
-          <Text style={styles.menuText}>{t("Common.wallet")}</Text>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() =>
+            navigation.navigate('App', {
+              screen: 'Home',
+              params: {screen: 'MainTabs', params: {screen: 'Wallet'}},
+            })
+          }>
+          <Wallet color={'#fff'} />
+          <Text style={styles.menuText}>{t('Common.wallet')}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Mining"}}})}>
-          <Pickaxe color={"#fff"} />
-          <Text style={styles.menuText}>{t("Common.mining")}</Text>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() =>
+            navigation.navigate('App', {
+              screen: 'Home',
+              params: {screen: 'MainTabs', params: {screen: 'Mining'}},
+            })
+          }>
+          <Pickaxe color={'#fff'} />
+          <Text style={styles.menuText}>{t('Common.mining')}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Leader"}}})}>
-          <Building2 color={"#fff"} />
-          <Text style={styles.menuText}>{t("Common.leader")}</Text>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() =>
+            navigation.navigate('App', {
+              screen: 'Home',
+              params: {screen: 'MainTabs', params: {screen: 'Leader'}},
+            })
+          }>
+          <Building2 color={'#fff'} />
+          <Text style={styles.menuText}>{t('Common.leader')}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Announcement"}}})}>
-          <Bell color={"#fff"} />
-          <Text style={styles.menuText}>{t("Common.announcement")}</Text>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() =>
+            navigation.navigate('App', {
+              screen: 'Home',
+              params: {screen: 'MainTabs', params: {screen: 'Announcement'}},
+            })
+          }>
+          <Bell color={'#fff'} />
+          <Text style={styles.menuText}>{t('Common.announcement')}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Account"}}})}>
-          <Settings color={"#fff"} />
-          <Text style={styles.menuText}>{t("Common.Account")}</Text>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() =>
+            navigation.navigate('App', {
+              screen: 'Home',
+              params: {screen: 'MainTabs', params: {screen: 'Account'}},
+            })
+          }>
+          <Settings color={'#fff'} />
+          <Text style={styles.menuText}>{t('Common.Account')}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
-          <Text style={[styles.menuText, { color: '#fff' }]}>{t("Common.logout")}</Text>
+          <Text style={[styles.menuText, {color: '#fff'}]}>
+            {t('Common.logout')}
+          </Text>
         </TouchableOpacity>
       </View>
 
       {/* Move Dropdown & Logout Button to Bottom */}
       <View style={styles.bottomSection}>
-       
-
         <DropDownPicker
           open={open}
           value={value}
@@ -62,10 +99,14 @@ const CustomDrawer = (props) => {
           setOpen={setOpen}
           setValue={setValue}
           containerStyle={styles.dropdownContainer}
-          ArrowUpIconComponent={({ style }) => <ChevronUp style={style} color={'#fff'} />}
-          ArrowDownIconComponent={({ style }) => <ChevronDown style={style} color={'#fff'} />}
+          ArrowUpIconComponent={({style}) => (
+            <ChevronUp style={style} color={'#fff'} />
+          )}
+          ArrowDownIconComponent={({style}) => (
+            <ChevronDown style={style} color={'#fff'} />
+          )}
           style={styles.dropdown}
-          dropDownDirection="BOTTOM"
+          dropDownDirection="AUTO"
           placeholder="ENG"
           placeholderStyle={{
             color: '#fff',
@@ -75,7 +116,7 @@ const CustomDrawer = (props) => {
             color: '#fff',
           }}
           theme="DARK"
-          onChangeValue={(value)=> i18n.changeLanguage(value)}
+          onChangeValue={value => i18n.changeLanguage(value)}
         />
       </View>
     </DrawerContentScrollView>
