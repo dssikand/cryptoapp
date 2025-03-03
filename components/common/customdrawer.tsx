@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { Bell, Building2, Pickaxe, Wallet, Settings, ChevronDown, ChevronUp } from 'lucide-react-native';
@@ -7,6 +7,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n';
 import { t } from 'i18next';
+import { AuthContext } from '../../authcontext';
 const languages = [
   { value: 'en', label: 'ENG' },
   { value: 'cn', label: '中文' },
@@ -16,7 +17,7 @@ const CustomDrawer = (props) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const navigation = useNavigation();
-
+  const {logout} = useContext(AuthContext)
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={styles.container}>
       {/* Menu Items */}
@@ -45,7 +46,7 @@ const CustomDrawer = (props) => {
           <Settings color={"#fff"} />
           <Text style={styles.menuText}>{t("Common.Account")}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.logoutButton} onPress={() => alert('Logging out')}>
+        <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
           <Text style={[styles.menuText, { color: '#fff' }]}>{t("Common.logout")}</Text>
         </TouchableOpacity>
       </View>

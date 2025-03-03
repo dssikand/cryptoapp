@@ -3,13 +3,14 @@ import {useMutation} from '@tanstack/react-query';
 import {SignInUser} from '../services/user.services';
 import Toast from 'react-native-toast-message';
 import {SetAuthToken, SetUser} from '../utils/common';
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 import { t } from "i18next";
 import { signInWithPassphrase } from "./api/authService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from '../authcontext';
 
 interface SignInPassphraseStepProps {
   value: string;
@@ -30,6 +31,7 @@ export default function SignInPassphraseStep({
     mutationFn: SignInUser,
     mutationKey: ['SIGN_USER'],
   });
+  const { login } = useContext(AuthContext);
   const HandleLogin = async () => {
     if (text.trim().length < 0) {
       Alert.alert("Phrase Can't be Empty");
@@ -38,6 +40,7 @@ export default function SignInPassphraseStep({
         
         const phrase = text.split(' ').join('');
         await AsyncStorage.setItem("passphrase",phrase)
+        console.log(phrase)
         const response = await siginUser({phrases: phrase, type: 'login'});
         console.log(response);
         if (response.success) {
@@ -46,7 +49,8 @@ export default function SignInPassphraseStep({
             text1: 'Login Successfully',
           });3
           navigation.navigate('App', {screen: 'Home', params: {screen: 'MainTabs', params: {screen: 'Wallet'}}, });
-          SetAuthToken(response.token);
+          
+          login(response.token)
           SetUser(response.data);
         } else {
           Toast.show({

@@ -38,12 +38,18 @@ const MiningScreen = () => {
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
+  const coolDownTime = 5 * 60 * 1000; 
+  const [loading, setLoading] = useState(false);
+
+  const { userData, updateUserData } = useState();
+  const [timeLeft, setTimeLeft] = useState({ minutes: 0, seconds: 0 });
+
+
   const outerContentTranslateY = useRef(new Animated.Value(-100)).current; // Start above screen
   const {data, isLoading} = useQuery({
     queryFn: CurrentUser,
     queryKey:['CURRENT_USER']
   }) 
-   console.log(totalvalue);
   
   
   useEffect(() => {
@@ -54,7 +60,42 @@ const MiningScreen = () => {
       easing: Easing.out(Easing.exp), // Smooth easing
       useNativeDriver: true,
     }).start();
-  }, []);
+    console.log(data?.data?.lastMingTime)
+    if (!data?.data?.lastMingTime) {
+      // navigation.navigate("mining");
+      return;
+    }
+
+    const lastSubmitTime = new Date(data?.data?.lastMingTime).getTime();
+    const targetTime = lastSubmitTime + coolDownTime;
+    const initialTimeLeft = targetTime - Date.now();
+
+    if (initialTimeLeft <= 0) {
+      // navigation.navigate("mining");
+      return;
+    }
+
+    const initialMinutes = Math.floor((initialTimeLeft / (1000 * 60)) % 60);
+    const initialSeconds = Math.floor((initialTimeLeft / 1000) % 60);
+    setTimeLeft({ minutes: initialMinutes, seconds: initialSeconds });
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev.seconds === 0) {
+          if (prev.minutes === 0) {
+            clearInterval(timer);
+            // navigation.navigate("mining");
+            return prev;
+          }
+          return { minutes: prev.minutes - 1, seconds: 59 };
+        }
+        return { ...prev, seconds: prev.seconds - 1 };
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.data]);
   const translateY = useRef(new Animated.Value(-100)).current; // Start above the screen
   useEffect(() => {
     // Animate the button from top to bottom
@@ -70,6 +111,9 @@ const MiningScreen = () => {
 
     console.log(data.data,"data")
   }
+  console.log(timeLeft)
+  const isTimeToStart = !!(timeLeft.minutes === 0 && timeLeft.seconds === 0);
+
   const referalcode= data.data.referralCode 
   const totalvalue=  data?.data?.totalValue?.referralBonus + data?.data?.totalValue?.referralsMiningCodeSum + data?.data?.totalValue?.userMiningCodeSum 
  
@@ -85,12 +129,30 @@ const MiningScreen = () => {
 
         {/* Image Section */}
         <View style={styles.imageContainer}>
+        <View style={styles.contain}>
+      {/* Timer absolute position adjusted */}
+      {!isTimeToStart && (
+        <View style={[styles.timerContainer]}>
+          <Text style={styles.timerText}>{t("Mining.nextMining")}:</Text>
+        </View>
+      )}
+
+      <CanvasQ />
+
+      {/* Timer absolute position adjusted */}
+      {!isTimeToStart && (
+        <View style={[styles.timerContainer2]}>
+          <Text style={styles.countdownText}>
+            {timeLeft.minutes} : {timeLeft.seconds.toString().padStart(2, "0")}
+          </Text>
+        </View>
+      )}
+    </View>
           {/* <Image
           source={require('../assets/img/coin_color.png')}
           style={styles.coinImage}
           resizeMode="contain"
         /> */}
-          <CanvasQ />
         </View>
 
         {/* Referral Code Section */}
@@ -103,19 +165,7 @@ const MiningScreen = () => {
             </View>
           <View style={styles.codeContainer}>
             <TouchableOpacity>
-              {/* <Svg
-              width={20}
-              height={20}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="white"
-              strokeWidth="1"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <Path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />
-              <Path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />
-            </Svg> */}
+         
             </TouchableOpacity>
           </View>
         </View>
@@ -160,10 +210,22 @@ const MiningScreen = () => {
         <View style={styles.buttonContainer}>
           <Animated.View
             style={[styles.buttonContainer, {transform: [{translateY}]}]}>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Objective")}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Objective")} disabled={!isTimeToStart || loading}>
+            {loading ? (
+              <CommonLoader  />
+            ) : !isTimeToStart ? (
+              <View style={styles.containerbtn}>
+              <Text style={styles.text}>Mining Session starting soon</Text>
+              <Text style={styles.timer}>
+                {timeLeft.minutes} : {timeLeft.seconds.toString().padStart(2, "0")}
+              </Text>
+            </View>
+            ) : (
               <Text style={styles.buttonText} >
               {t("Common.continue")}
               </Text>
+            )}
+           
             </TouchableOpacity>
           </Animated.View>
         </View>
@@ -571,6 +633,48 @@ marginBottom:30
     fontWeight: 'bold',
     paddingBottom:0,
     marginBottom:0
+  },
+  contain: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 16,
+    position: 'relative',
+  },
+  timerContainer: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    top:responsiveHeight(-1)
+  },
+  timerContainer2: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    bottom:responsiveHeight(5)
+  },
+  timerText: {
+    fontSize: 14,
+    color: 'white',
+  },
+  countdownText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  containerbtn: {
+    flexDirection: 'row', // Replaces `flex`
+    alignItems: 'center', // Replaces `items-center`
+    justifyContent: 'center', // Replaces `justify-center`
+    gap: 8, // Replaces `gap-2`
+  },
+  text: {
+    fontSize: 16, // Adjust as needed
+    color: 'white',
+  },
+  timer: {
+    fontSize: 12, // Replaces `text-xs`
+    color: 'white',
   },
 });
 

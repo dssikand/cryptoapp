@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -19,12 +19,14 @@ import CommonLoader from './common/commonloader';
 import { useMutation } from '@tanstack/react-query';
 import { GetUser, SetAuthToken, SetUser } from '../utils/common';
 import Toast from 'react-native-toast-message';
+import { AuthContext } from '../authcontext';
 
 interface SignInPassphraseStepProps {
   value: string;
   loading: boolean;
   onValueChange: (value: string) => void;
   onSignIn: () => void;
+  route: any
 }
 
 export default function ReferalCode({
@@ -32,6 +34,7 @@ export default function ReferalCode({
   loading,
   onValueChange,
   onSignIn,
+  route,
 }: SignInPassphraseStepProps) {
   const navigation = useNavigation();
   const [text, setText] = useState('');
@@ -44,6 +47,8 @@ export default function ReferalCode({
     mutationFn: checkReferalCode,
     mutationKey: ['CHECK_REFER']
   })
+  const { login } = useContext(AuthContext);
+  const { token } = route.params;
   const HandleRegister = async () => {
         // if (passphrase.trim().length < 0) {
         //   Alert.alert("Phrase Can't be Empty");
@@ -63,7 +68,7 @@ export default function ReferalCode({
                     text1: 'Login Successfully',
                   });3
                   navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Wallet"}}})
-                  
+                  login(token)
               
                 } else {
                   Toast.show({
@@ -86,7 +91,7 @@ export default function ReferalCode({
                   text1: 'Login Successfully',
                 });3
                 navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Wallet"}}})
-                
+                login(token)
             
               } else {
                 Toast.show({

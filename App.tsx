@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -32,6 +32,7 @@ import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import "./i18n"; // Import i18n config
 import { useTranslation } from 'react-i18next';
+import { AuthContext, AuthProvider } from './authcontext';
 // Create Navigators
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -114,25 +115,8 @@ function DrawerNavigator() {
     </Drawer.Navigator>
   );
 }
-
-// ✅ Root Stack (Handles Auth vs Main App)
-export default function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        setIsLoggedIn(!!token); // Convert to boolean (true if token exists, false otherwise)
-      } catch (error) {
-        console.error('Error fetching auth token:', error);
-      }
-      setIsLoading(false);
-    };
-
-    checkAuth();
-  }, []);
-
+function Navigation() {
+  const { isLoggedIn, isLoading } = useContext(AuthContext);
   useEffect(() => {
     const backAction = () => {
       if (isLoggedIn) {
@@ -148,25 +132,34 @@ export default function App() {
     );
     return () => backHandler.remove();
   }, [isLoggedIn]);
+  // ✅ Show loading indicator while checking auth state
   if (isLoading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
         <ActivityIndicator size="large" color="#ff922b" />
       </View>
     );
   }
+  console.log(isLoggedIn,"ISLOGGEDIN")
   return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="App" component={isLoggedIn ? DrawerNavigator : AuthStack} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+// ✅ Root Stack (Handles Auth vs Main App)
+export default function App() {
+
+
+  
+  return (
+    <AuthProvider>
     <QueryClientProvider client={queryClient}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-          {isLoggedIn ? (
-            <Stack.Screen name="App" component={DrawerNavigator} />
-          ) : (
-            <Stack.Screen name="Auth" component={AuthStack} />
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
+      <Navigation />
       <Toast position={'bottom'} />
     </QueryClientProvider>
+    </AuthProvider>
   );
 }

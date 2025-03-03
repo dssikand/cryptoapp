@@ -135,7 +135,7 @@ export const SetAuthToken = async token => {
 };
 
 export const GetAuthToken = async token => {
-  await AsyncStorage.getItem('token');
+ return  await AsyncStorage.getItem('token');
 };
 export const SetUser = async user => {
   await AsyncStorage.setItem('user', JSON.stringify(user));

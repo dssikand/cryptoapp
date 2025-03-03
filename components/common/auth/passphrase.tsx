@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -26,6 +26,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { useMutation } from '@tanstack/react-query';
 import { SignInUser } from '../../../services/user.services';
+import { AuthContext } from '../../../authcontext';
 const languages = [
   {value: 'en', label: 'ENG'},
   {value: 'cn', label: '中文'},
@@ -47,6 +48,7 @@ export default function PassphraseGenerator({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const navigation = useNavigation();
+   
   const {mutateAsync: siginUser, isPending} = useMutation({
     mutationFn: SignInUser,
     mutationKey: ['SIGN_USER'],
@@ -75,7 +77,7 @@ export default function PassphraseGenerator({
       const fileName =
         language.value === 'en'
           ? 'https://www.qoyn.network/english.txt'
-          : '/chinese_simplified.txt';
+          : 'https://www.qoyn.network/chinese_simplified.txt';
       const response = await fetch(fileName);
       if (!response.ok) {
         throw new Error(`Failed to fetch word list: ${response.statusText}`);
@@ -116,8 +118,8 @@ export default function PassphraseGenerator({
               type: 'success',
               text1: 'Login Successfully',
             });3
-            navigation.navigate("ReferalCode")
-            SetAuthToken(response.token);
+            navigation.navigate("ReferalCode",{token: response.token})
+            // login(response.token);
             SetUser(response.data);
           } else {
             Toast.show({
@@ -136,8 +138,16 @@ export default function PassphraseGenerator({
     };
   useEffect(() => {
     generatePassphrase();
-  }, [generatePassphrase]);
-
+  }, [generatePassphrase,language]);
+  const handlesetLanguage = (value) => {
+    
+      console.log(value)
+      i18n.changeLanguage(value)
+      const selectLang = languages.find((lang) => lang.value == value)
+      console.log(selectLang)
+      setLanguage(selectLang)
+    
+  }
   return (
     <>
       <View style={styles.container}>
@@ -167,7 +177,7 @@ export default function PassphraseGenerator({
               color: '#fff',
             }}
             theme="DARK"
-            onChangeValue={(value)=> i18n.changeLanguage(value)}
+            onChangeValue={(value)=> handlesetLanguage(value)}
           />
         </View>
 

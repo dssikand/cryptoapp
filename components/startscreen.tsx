@@ -54,11 +54,11 @@ export default function StartScreen() {
 
         {/* Animated Buttons */}
         <Animated.View style={[styles.buttonContainer, { opacity: buttonFade, transform: [{ translateY: buttonSlide }] }]}>
-          <TouchableOpacity style={styles.buttonTelegram} onPress={() => navigation.navigate("Auth", { screen: "SignIn" })}>
+          <TouchableOpacity style={styles.buttonTelegram} onPress={() => navigation.navigate("App", { screen: "SignIn" })}>
             <Text style={styles.buttonText}>{t("Common.signIn")}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonTelegram2} onPress={() => navigation.navigate("Auth", { screen: "SignUp" })}>
+          <TouchableOpacity style={styles.buttonTelegram2} onPress={() => navigation.navigate("App", { screen: "SignUp" })}>
             <Text style={styles.buttonText2}>{t("Common.signUp")}</Text>
           </TouchableOpacity>
         </Animated.View>
