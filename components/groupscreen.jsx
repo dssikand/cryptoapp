@@ -19,24 +19,24 @@ import { t } from 'i18next';
 import { useQuery } from '@tanstack/react-query';
 import {  LeaderBoard } from '../services/user.services';
 import CommonLoader from './common/commonloader';
-
+import { CurrentUser } from '../services/user.services';
 const leaderboardData = [
-  {id: '1', rank: 1, username: 'backy6666', coins: '25.20'},
-  {id: '2', rank: 2, username: 'cryptoKing', coins: '18.75'},
-  {id: '3', rank: 3, username: 'minerPro', coins: '15.40'},
-  {id: '4', rank: 4, username: 'blockchainDude', coins: '12.00'},
-  {id: '5', rank: 5, username: 'Satoshi', coins: '10.50'},
-  {id: '6', rank: 6, username: 'BitLover', coins: '9.25'},
-  {id: '7', rank: 7, username: 'HashMaster', coins: '8.80'},
+  { id: '1', rank: 1, referralCode: 'REF12345', coins: '25.20' },
+  { id: '2', rank: 2, referralCode: 'REF67890', coins: '18.75' },
+  { id: '3', rank: 3, referralCode: 'REF11223', coins: '15.40' },
+  { id: '4', rank: 4, referralCode: 'REF44556', coins: '12.00' },
+  { id: '5', rank: 5, referralCode: 'REF77889', coins: '10.50' },
+  { id: '6', rank: 6, referralCode: 'REF99001', coins: '9.25' },
+  { id: '7', rank: 7, referralCode: 'REF22334', coins: '8.80' },
 ];
 
-const LeaderboardScreen = () => {
+const GroupScreen = () => {
   const animations = useRef(
     leaderboardData.map(() => new Animated.Value(0)),
   ).current;
   const {data, isLoading} = useQuery({
-    queryFn: LeaderBoard,
-    queryKey: ['LEADER_BOARD'],
+    queryFn: CurrentUser,
+    queryKey: ['CURRENT_USER'],
   });
 
   console.log(data);
@@ -103,6 +103,7 @@ const LeaderboardScreen = () => {
                     <Text style={styles.rankText}>{t('LeaderBoard.rank')}</Text>
                     <View
                       style={{
+                        padding: 10,
                       }}>
                       <LinearGradient
                         colors={['#F06400', '#FFBF6E']}
@@ -116,7 +117,7 @@ const LeaderboardScreen = () => {
                 <View style={styles.userContainer}>
                   <Text style={styles.username}>{t('LeaderBoard.referralCode')}</Text>
 
-                  <Text style={styles.coins}>{item.referralCode}</Text>
+                  <Text style={styles.coins}>{item.name}</Text>
                 </View>
                 <View style={styles.userContainer}>
                   <Text style={styles.username}>
@@ -144,17 +145,20 @@ const LeaderboardScreen = () => {
         source={require('../assets/img/crypt.jpeg')}
         style={styles.background}
         resizeMode="cover">
-        <Text style={styles.Toptext}>{t('Common.leader')}</Text>
+        <Text style={styles.Toptext}>{t('Common.group')}</Text>
 
         {/* Ensuring Full-Height View for FlatList */}
         <View style={styles.bg}>
           <FlatList
-            data={data.data}
+            data={data.data.referrals}
             keyExtractor={item => item.id}
             renderItem={renderItem}
-            showsVerticalScrollIndicator={true} 
-            // Enable vertical scrolling indicator
-            
+            showsVerticalScrollIndicator={true} // Enable vertical scrolling indicator
+            ListEmptyComponent={
+                          <View style={styles.emptyContainer}>
+                            <Text style={styles.emptyText}>No Data Available</Text>
+                          </View>
+                        }
           />
         </View>
       </ImageBackground>
@@ -168,7 +172,15 @@ const styles = StyleSheet.create({
     padding: 10,
     height: responsiveHeight(100),
   },
-  
+  emptyContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  emptyText: {
+    fontSize: 18,
+    color: 'white',
+  },
   Toptext: {
     color: '#fff',
     fontSize: 22,
@@ -193,13 +205,14 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   rankContainer: {
-    height: 30,
+    height: 32,
     flex: 1,
     borderRadius: 16,
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
     // margin: Platform.OS == 'ios' ? 10 : 0,
+    width: Platform.OS == 'ios' ? responsiveWidth(100) : responsiveWidth(100),
   },
   userContainer: {
     height: 32,
@@ -245,4 +258,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LeaderboardScreen;
+export default GroupScreen;

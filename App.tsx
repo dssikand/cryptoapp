@@ -8,10 +8,13 @@ import 'react-native-gesture-handler';
 import {
   Bell,
   Building2,
+  Group,
   HomeIcon,
   LucideHome,
   Pickaxe,
   Settings,
+  User,
+  Users,
   Wallet,
 } from 'lucide-react-native';
 
@@ -33,6 +36,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import "./i18n"; // Import i18n config
 import { useTranslation } from 'react-i18next';
 import { AuthContext, AuthProvider } from './authcontext';
+import GroupScreen from './components/groupscreen';
+// import { setupFirebaseNotifications } from './firebaseService';
 // Create Navigators
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -54,8 +59,8 @@ function BottomTabs() {
             iconName = <Building2 color={focused ? "#ff922b" : "#adb5bd"} />;
           } else if (route.name === 'Announcement'|| route.name==="公告") {
             iconName = <Bell color={focused ? "#ff922b" : "#adb5bd"} />;
-          } else if (route.name === 'My Account'|| route.name==="我的账户") {
-            iconName = <Settings color={focused ? "#ff922b" : "#adb5bd"} />;
+          } else if (route.name === 'Group'|| route.name==="我的推荐组") {
+            iconName = <Users color={focused ? "#ff922b" : "#adb5bd"} />;
           }
           return <Text>{iconName}</Text>;
         },
@@ -70,7 +75,7 @@ function BottomTabs() {
       <Tab.Screen name={t("Common.mining")} component={MiningScreen} />
       <Tab.Screen name={t("Common.leader")} component={LeaderboardScreen} />
       <Tab.Screen name={t("Common.announcement")} component={AnnouncemntScreen} />
-      <Tab.Screen name={t("Common.Account")} component={SettingScreen} />
+      <Tab.Screen name={t("Common.group")} component={GroupScreen} />
     </Tab.Navigator>
   );
 }
@@ -94,6 +99,8 @@ function MainStack() {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="MainTabs" component={BottomTabs} />
       <Stack.Screen name="Objective" component={ObjectiveScreen} />
+      <Stack.Screen name="Account" component={SettingScreen} />
+
     </Stack.Navigator>
   );
 }
@@ -112,6 +119,8 @@ function DrawerNavigator() {
       }}>
       <Drawer.Screen name="Home" component={MainStack} />
       <Drawer.Screen name="Objective" component={ObjectiveScreen} />
+      <Drawer.Screen name="Account" component={SettingScreen} />
+
     </Drawer.Navigator>
   );
 }
@@ -143,7 +152,7 @@ function Navigation() {
   console.log(isLoggedIn,"ISLOGGEDIN")
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false, cardStyle:{backgroundColor: "#000"} }}>
         <Stack.Screen name="App" component={isLoggedIn ? DrawerNavigator : AuthStack} />
       </Stack.Navigator>
     </NavigationContainer>

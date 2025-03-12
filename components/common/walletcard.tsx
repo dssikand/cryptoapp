@@ -83,7 +83,7 @@ export function WalletCard({refrealCode, totalValue}) {
                   onPress={() =>
                     copyToClipboard(refrealCode, 'Referral Code Copied')
                   }>
-                  <Copy color={'white'} />
+                  <Copy color={'white'} size={19} style={styles.copyico}/>
                 </TouchableOpacity>
               </Text>
             </View>
@@ -100,6 +100,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+  },
+  copyico:{
+marginLeft:7,
+paddingTop:5
+
   },
   card: {
     padding: 50,
@@ -140,7 +145,7 @@ const styles = StyleSheet.create({
   referralCode: {
     color: '#ff922b',
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 19,
   },
   walletTitle: {
     fontSize: 22,
@@ -182,7 +187,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom:4
+    marginBottom:6,
+    verticalAlign:"middle",
     
   },
   cardInner: {

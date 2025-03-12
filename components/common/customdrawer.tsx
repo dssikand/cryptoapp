@@ -77,12 +77,13 @@ const CustomDrawer = (props) => {
           onPress={() =>
             navigation.navigate('App', {
               screen: 'Home',
-              params: {screen: 'MainTabs', params: {screen: 'Account'}},
+              params: {screen: 'Account', params: {screen: 'Account'}},
             })
           }>
           <Settings color={'#fff'} />
           <Text style={styles.menuText}>{t('Common.Account')}</Text>
         </TouchableOpacity>
+        
         <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
           <Text style={[styles.menuText, {color: '#fff'}]}>
             {t('Common.logout')}

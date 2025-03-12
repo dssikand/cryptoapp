@@ -199,10 +199,12 @@ export default function PassphraseGenerator({
             copyToClipboard(passphrase.join())
             await AsyncStorage.setItem("passphrase",passphrase.join(' '))
           }}>
-          <Text style={styles.copyText}>
-           {t("Auth.passphraseGenerator.copyAllWords")}
-            <Copy size={20} color={'white'} style={styles.icontext} />{' '}
-          </Text>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+        <Text style={styles.copyText}>
+          {t("Auth.passphraseGenerator.copyAllWords")}
+        </Text>
+        <Copy size={20} color="white" />
+      </View>
         </TouchableOpacity>
         <View style={styles.flexEnd}>
           <Text style={styles.disclaimerText}>

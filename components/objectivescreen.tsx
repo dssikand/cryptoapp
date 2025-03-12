@@ -26,7 +26,7 @@ import {
 import CanvasQ from './common/canvasq';
 import {useNavigation} from '@react-navigation/native';
 import Navbar from './common/navbar';
-import {Copy, SquareCheck} from 'lucide-react-native';
+import {ArrowBigDown, CircleArrowLeft, Copy, SquareCheck} from 'lucide-react-native';
 import {useQuery} from '@tanstack/react-query';
 import {ActiveUser, CurrentUser, SubmitCode} from '../services/user.services';
 import {t} from 'i18next';
@@ -37,8 +37,8 @@ import {SetAuthToken, SetUser} from '../utils/common';
 const ObjectiveScreen = () => {
   const navigation = useNavigation();
   const [seeMoreVisible, setSeeMoreVisible] = useState(false);
-  const openLink = prefix => {
-    Linking.openURL(`https://www.qoyn.network/mining.html?prefix=${prefix}`);
+  const openLink = (prefix,suffix) => {
+    Linking.openURL(`https://www.qoyn.network/mining.html?prefix=${prefix}&suffix=${suffix}`);
   };
   const [code, setCode] = useState('');
 
@@ -146,20 +146,23 @@ const ObjectiveScreen = () => {
         {/* Continue Button */}
 
         <View style={styles.centeredView}>
-          <Text style={styles.modalText}>{t('ProofOfWork.objective')}</Text>
+        <View style={styles.header}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <CircleArrowLeft color={"white"} size={25}/>
+      </TouchableOpacity>
+             <Text style={styles.modalText}>{t('ProofOfWork.objective')}</Text>
+
+      <View style={styles.rightPlaceholder} /> {/* Empty space on the right */}
+    </View>
+
+
 
           <View style={styles.modalView}>
             <Text style={styles.modalText2}>
               {t('MiningSession.objective.description')}{' '}
               <Text style={styles.text2}>{activeuserdata.data.puzzle}</Text>
             </Text>
-            <TouchableOpacity
-              onPress={() => setSeeMoreVisible(!seeMoreVisible)}>
-              <Text style={styles.modalText3}>
-                {seeMoreVisible ? 'See Less' : 'See More'}
-              </Text>
-            </TouchableOpacity>
-            {seeMoreVisible && (
+         
               <View>
                 <Text style={styles.title}>
                   {t('MiningSession.conditions.title')}
@@ -227,7 +230,7 @@ const ObjectiveScreen = () => {
                       <TouchableOpacity
                         onPress={() =>
                           copyToClipboard(
-                            data.data.referralCode,
+                            data.data.suffix.suffix,
                             'Suffix Copied',
                           )
                         }>
@@ -258,14 +261,14 @@ const ObjectiveScreen = () => {
                     {t('MiningSession.needHelp')}
                     <Text
                       style={[styles.helpText, styles.link]}
-                      onPress={() => openLink(data.data.referralCode)}>
+                      onPress={() => openLink(data.data.referralCode,data.data.suffix.suffix)}>
                       {' '}
                       {t('MiningSession.miner')}.
                     </Text>
                   </Text>
                 </View>
               </View>
-            )}
+          
 
             <View
               style={{
@@ -281,6 +284,7 @@ const ObjectiveScreen = () => {
                 onChangeText={newCode => setCode(newCode)}
                 placeholderTextColor="rgba(255, 255, 255, 0.5)"
                 style={styles.inputText}
+                multiline={true}
               />
               <TouchableOpacity
                 style={styles.submitbtn}
@@ -487,7 +491,8 @@ const styles = StyleSheet.create({
     color: '#fff0db',
     fontSize: 20,
     fontWeight: 700,
-    textAlign: 'left',
+    textAlign: "center",
+    flex: 1,
   },
 
   modalText2: {
@@ -522,6 +527,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.3)',
+    textAlignVertical: "top",
   },
   title: {
     fontSize: 20,
@@ -594,6 +600,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingBottom: 0,
     marginBottom: 0,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: 50,
+    paddingHorizontal: 10,
+  },
+  backButton: {
+    width: 50, // Ensures left alignment
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "center",
+    flex: 1, // Centers the text
+  },
+  rightPlaceholder: {
+    width: 50, // Keeps the right side empty
   },
 });
 

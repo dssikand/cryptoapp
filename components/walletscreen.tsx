@@ -18,10 +18,16 @@ import {useNavigation} from '@react-navigation/native';
 import Navbar from './common/navbar';
 import {GetUser} from '../utils/common';
 import { t } from 'i18next';
+import { useQuery } from '@tanstack/react-query';
+import { CurrentUser } from '../services/user.services';
 
 export function WalletScreen() {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
+  const {data, isLoading} = useQuery({
+    queryFn: CurrentUser,
+    queryKey: ['CURRENT_USER'],
+  });
   useEffect(() => {
     async function SetUser() {
       const user = await GetUser();
@@ -29,7 +35,7 @@ export function WalletScreen() {
     }
     SetUser();
   }, []);
-  console.log(user);
+  console.log(data);
   return (
     <ImageBackground
       source={require('../assets/img/crypt.jpeg')} // Change to your image path
@@ -40,8 +46,8 @@ export function WalletScreen() {
         {/* Wallet Card with Fade-in Animation */}
         <Animatable.View animation="fadeInUp" duration={1200} delay={500}>
           <WalletCard
-            refrealCode={user?.referralCode}
-            totalValue={user?.totalValue}
+            refrealCode={data?.data?.referralCode}
+            totalValue={data?.data?.totalValue}
           />
         </Animatable.View>
 
@@ -88,9 +94,9 @@ export function WalletScreen() {
                 <View style={styles.amount}>
                   <Text style={styles.amountText}>
                     <Text style={styles.decimalText}>
-                      {activity == 'Mined Coins'
-                        ? user?.totalValue?.referralBonus
-                        : user?.totalValue?.referralsMiningCodeSum}
+                      {activity !== 'Mined Coins'
+                        ? data?.data?.totalValue?.referralBonus
+                        : data?.data?.totalValue?.userMiningCodeSum}
                       .00
                     </Text>
                   </Text>

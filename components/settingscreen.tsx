@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {t} from 'i18next';
-import {Info} from 'lucide-react-native';
+import {Info,CircleArrowLeft} from 'lucide-react-native';
 import React, {useState, useEffect} from 'react';
 import {
   View,
@@ -21,6 +21,8 @@ import Svg, {Path} from 'react-native-svg';
 import RecoveryModal from './common/recoveverymodal';
 import Toast from 'react-native-toast-message';
 import passphrase from './common/auth/passphrase';
+import {useNavigation} from '@react-navigation/native';
+
 export default function SettingScreen() {
   const [activeSection, setActiveSection] = useState('Recovery Password');
 
@@ -31,6 +33,7 @@ export default function SettingScreen() {
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [recoveryphase, setRecoveryPhase] = useState('');
+  const navigation = useNavigation();
   useEffect(() => {
     async function setRecoveryphase() {
       const recoveryphase = await AsyncStorage.getItem('passphrase');
@@ -40,7 +43,15 @@ export default function SettingScreen() {
   });
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.header}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <CircleArrowLeft color={"white"} size={25}/>
+      </TouchableOpacity>
       <Text style={styles.Toptext}>{t('Common.settings')}</Text>
+
+
+      <View style={styles.rightPlaceholder} /> {/* Empty space on the right */}
+    </View>
 
       {/* Sidebar Buttons */}
       <View style={styles.sidebar}>
@@ -80,6 +91,39 @@ export default function SettingScreen() {
 
 // **Recovery Password Component**
 const RecoveryPassword = ({phrase}) => {
+  const [isHidden, setIsHidden] = useState(false);
+  const checkRecoveryPhrase = async () => {
+    const phrase = await AsyncStorage.getItem("passphrase")
+    if(phrase == null){
+      setIsHidden(true)
+    }else{
+      setIsHidden(false)
+    }
+  }
+  useEffect(() => {
+    async function Checkphrase(){
+      checkRecoveryPhrase()
+    }
+    Checkphrase()
+  },[])
+  const handleHidePassphrase = async () => {
+    try {
+      await AsyncStorage.removeItem('passphrase'); // Remove from AsyncStorage
+      setIsHidden(true); // Hide the passphrase in UI
+      Toast.show({
+        type: 'success',
+        text1: 'Recovery Password Hidden',
+        position: 'top',
+      });
+    } catch (error) {
+      console.error('Error hiding passphrase:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Failed to hide recovery password',
+        position: 'top',
+      });
+    }
+  };
   const copyToClipboard = text => {
     Clipboard.setString(text);
     Toast.show({
@@ -90,34 +134,37 @@ const RecoveryPassword = ({phrase}) => {
   };
   return (
     <>
-      <View style={styles.card}>
-        {/* Header Section */}
-        <View>
-          <View style={styles.betweenText}>
-            <Text style={styles.headerText}>
-              {t('Account.recoveryPassword')}
-            </Text>
-            <View style={styles.iconWrapper}>
-              <Info size={20} color="#E03000" />
+      {!isHidden && (
+        <View style={styles.card}>
+          {/* Header Section */}
+          <View>
+            <View style={styles.betweenText}>
+              <Text style={styles.headerText}>
+                {t('Account.recoveryPassword')}
+              </Text>
+              <View style={styles.iconWrapper}>
+                <Info size={20} color="#E03000" />
+              </View>
             </View>
+            <Text style={styles.description}>
+              Use your recovery password to load your account on new devices.
+            </Text>
           </View>
-          <Text style={styles.description}>
-            Use your recovery password to load your account on new devices.
-          </Text>
-        </View>
 
-        <View style={styles.recoveryBox}>
-          <Text style={styles.recoveryText}>{phrase}</Text>
+          <View style={styles.recoveryBox}>
+            <Text style={styles.recoveryText}>{phrase}</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.copyButton}
+            
+            onPress={async () => {
+              copyToClipboard(phrase);
+              await AsyncStorage.setItem('passphrase', phrase.join(' '));
+            }}>
+            <Text style={styles.copyButtonText}>Copy</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.copyButton}
-          onPress={async () => {
-            copyToClipboard(phrase);
-            await AsyncStorage.setItem('passphrase', phrase.join(' '));
-          }}>
-          <Text style={styles.copyButtonText}>Copy</Text>
-        </TouchableOpacity>
-      </View>
+      )}
 
       <View style={styles.hideSection}>
         <View>
@@ -126,7 +173,7 @@ const RecoveryPassword = ({phrase}) => {
             Permanently hide your recovery password on this device.
           </Text>
         </View>
-        <TouchableOpacity style={styles.hideButton}>
+        <TouchableOpacity style={styles.hideButton} onPress={handleHidePassphrase}>
           <Text style={styles.hideButtonText}>Hide</Text>
         </TouchableOpacity>
       </View>
@@ -218,17 +265,24 @@ const styles = StyleSheet.create({
   //   // padding: 20,
   // },
   betweenText: {
-    justifyContent: 'space-between',
     width: responsiveWidth(80),
     flexDirection: 'row',
+    gap:10,
   },
   Toptext: {
+    // color: '#fff',
+    // fontSize: 22,
+    // fontWeight: 'bold',
+    // marginTop: Platform.OS == 'ios' ? 45 : 20,
+    // marginBottom: 30,
+    // textAlign: 'center',
+    // flex: 1,
     color: '#fff',
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginTop: Platform.OS == 'ios' ? 45 : 20,
-    marginBottom: 30,
-    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 700,
+    textAlign: "center",
+    flex: 1,
+    marginTop: Platform.OS == 'ios' ? 45 : 0,
   },
   sidebar: {
     marginBottom: 20,
@@ -360,6 +414,9 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'rgba(224, 48, 0, 0.3)',
     // padding: 20,
+    borderBottomWidth: 1,
+    borderColor: '#4B5563',
+
   },
   headerText: {
     fontSize: 20,
@@ -394,6 +451,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     width: responsiveWidth(20),
+    marginBottom:20
   },
   copyButtonText: {
     color: '#fff',
@@ -402,8 +460,7 @@ const styles = StyleSheet.create({
   hideSection: {
     marginTop: 30,
     paddingTop: 20,
-    borderTopWidth: 1,
-    borderColor: '#4B5563',
+   
     flexDirection: 'column',
     alignItems: 'left',
   },
@@ -483,5 +540,28 @@ const styles = StyleSheet.create({
   },
   cancelText: {
     color: '#D1D5DB',
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: 50,
+    paddingHorizontal: 10,
+    marginBottom:20
+  },
+  backButton: {
+    width: 50, // Ensures left alignment
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "center",
+    flex: 1, // Centers the text
+  },
+  rightPlaceholder: {
+    width: 50, // Keeps the right side empty
   },
 });

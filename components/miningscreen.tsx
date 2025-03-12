@@ -13,6 +13,7 @@ import {
   Easing,
   Linking,
   Clipboard,
+  Alert,
 } from 'react-native';
 import Svg, {Path} from 'react-native-svg';
 import LinearGradient from 'react-native-linear-gradient';
@@ -32,6 +33,7 @@ import CommonLoader from './common/commonloader';
 import Toast from 'react-native-toast-message';
 
 const MiningScreen = () => {
+  
   const navigation = useNavigation();
   const [seeMoreVisible, setSeeMoreVisible] = useState(false);
   const openLink = () => {
@@ -151,14 +153,14 @@ const MiningScreen = () => {
             <CanvasQ />
 
             {/* Timer absolute position adjusted */}
-            {!isTimeToStart && (
+            {/* {!isTimeToStart && (
               <View style={[styles.timerContainer2]}>
                 <Text style={styles.countdownText}>
                   {timeLeft.minutes} :{' '}
                   {timeLeft.seconds.toString().padStart(2, '0')}
                 </Text>
               </View>
-            )}
+            )} */}
           </View>
           {/* <Image
           source={require('../assets/img/coin_color.png')}
@@ -168,18 +170,16 @@ const MiningScreen = () => {
         </View>
 
         {/* Referral Code Section */}
+        {!isTimeToStart && (
         <View style={styles.referralSection}>
-          <Text style={styles.referralText}>{t('Common.referralCode')}</Text>
-          <View style={styles.referralCodeContainer}>
-            <Text style={styles.referralCode}>
-              {referalcode}{' '}
-              <TouchableOpacity onPress={() => copyToClipboard(referalcode)}>
-                <Copy color={'white'} size={20} style={styles.iconcopy} />
-              </TouchableOpacity>
-            </Text>
-          </View>
-          <View style={styles.codeContainer}></View>
+        <View style={[styles.timerContainer2]}>
+                <Text style={styles.countdownText}>
+                  {timeLeft.minutes} :{' '}
+                  {timeLeft.seconds.toString().padStart(2, '0')}
+                </Text>
+              </View>
         </View>
+           )}
 
         {/* Balance Card Section */}
 
@@ -295,6 +295,7 @@ marginBottom:30
     width: responsiveWidth(80),
     height: responsiveHeight(12),
     alignItems: 'center',
+    
   },
   imageContainer: {
     alignItems: 'center',
@@ -307,7 +308,7 @@ marginBottom:30
   },
   referralSection: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 40,
   },
   referralText: {
     color: '#fff',
@@ -327,6 +328,7 @@ marginBottom:30
     borderRadius: 18,
     borderWidth: 2,
     borderColor: 'rgba(255,255,255,0.1)',
+    marginTop:30
   },
   balanceInfo: {
     justifyContent: 'space-between',
@@ -381,7 +383,7 @@ marginBottom:30
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: -10,
+    bottom: -20,
     alignItems: 'center',
     width: '100%',
   },
@@ -555,7 +557,7 @@ marginBottom:30
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    bottom:responsiveHeight(5)
+    bottom:responsiveHeight(-2)
   },
   timerText: {
     fontSize: 14,

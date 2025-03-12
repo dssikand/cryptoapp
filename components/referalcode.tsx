@@ -37,6 +37,8 @@ export default function ReferalCode({
   route,
 }: SignInPassphraseStepProps) {
   const navigation = useNavigation();
+  
+  const [referredBy, setReferredBy] = useState("");
   const [text, setText] = useState('');
   const [refferedby,setRefferedby] = useState('')
   const {mutateAsync: userregister, isPending} = useMutation({
@@ -60,7 +62,7 @@ export default function ReferalCode({
               const refreresponse = await checkRefer({referralCode: refferedby})
               console.log(refreresponse)
               if(refreresponse.success){
-                const response = await userregister({name: "", refferedby: refferedby,country:"",_id: user._id,isProfileCompleted: true});
+                const response = await userregister({name: "", referredBy: refreresponse.data.userId,country:"",_id: user._id,isProfileCompleted: true});
                 console.log(response);
                 if (response.success) {
                   Toast.show({
@@ -133,8 +135,12 @@ export default function ReferalCode({
             placeholder="Enter referral code"
             placeholderTextColor="rgba(255, 255, 255, 0.6)"
             maxLength={10}
-            onChangeText={setRefer => setRefferedby(setRefer)}
-
+            autoCapitalize="none"
+            value={refferedby}
+            // onChangeText={setRefer => setRefferedby(setRefer)}
+            autoCorrect={false}
+            onChangeText={(setRefer) => setRefferedby(setRefer.toLowerCase())}
+          
           />
         </View>
 
