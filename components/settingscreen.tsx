@@ -2,7 +2,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {t} from 'i18next';
 import {Info,CircleArrowLeft} from 'lucide-react-native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import {
   Modal,
   Clipboard,
   GestureResponderEvent,
+  ActivityIndicator,
 } from 'react-native';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
 import Svg, {Path} from 'react-native-svg';
@@ -22,6 +23,10 @@ import RecoveryModal from './common/recoveverymodal';
 import Toast from 'react-native-toast-message';
 import passphrase from './common/auth/passphrase';
 import {useNavigation} from '@react-navigation/native';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { CurrentUser, deleteUser } from '../services/user.services';
+import CommonLoader from './common/commonloader';
+import { AuthContext } from '../authcontext';
 
 export default function SettingScreen() {
   const [activeSection, setActiveSection] = useState('Recovery Password');
@@ -45,7 +50,7 @@ export default function SettingScreen() {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <CircleArrowLeft color={"white"} size={25}/>
+          <CircleArrowLeft color={'white'} size={25} />
       </TouchableOpacity>
       <Text style={styles.Toptext}>{t('Common.settings')}</Text>
 
@@ -93,19 +98,19 @@ export default function SettingScreen() {
 const RecoveryPassword = ({phrase}) => {
   const [isHidden, setIsHidden] = useState(false);
   const checkRecoveryPhrase = async () => {
-    const phrase = await AsyncStorage.getItem("passphrase")
+    const phrase = await AsyncStorage.getItem('passphrase');
     if(phrase == null){
-      setIsHidden(true)
+      setIsHidden(true);
     }else{
-      setIsHidden(false)
+      setIsHidden(false);
     }
-  }
+  };
   useEffect(() => {
     async function Checkphrase(){
-      checkRecoveryPhrase()
+      checkRecoveryPhrase();
     }
-    Checkphrase()
-  },[])
+    Checkphrase();
+  }, []);
   const handleHidePassphrase = async () => {
     try {
       await AsyncStorage.removeItem('passphrase'); // Remove from AsyncStorage
@@ -156,7 +161,7 @@ const RecoveryPassword = ({phrase}) => {
           </View>
           <TouchableOpacity
             style={styles.copyButton}
-            
+
             onPress={async () => {
               copyToClipboard(phrase);
               await AsyncStorage.setItem('passphrase', phrase.join(' '));
@@ -205,17 +210,75 @@ const RecoveryPassword = ({phrase}) => {
 };
 
 // **Delete Account Component**
-const DeleteAccount = () => (
-  <View style={styles.infoContainer}>
-    <Text style={styles.text}>
-      Warning: This action cannot be undone. This will permanently delete your
-      account and remove your data from our servers.
-    </Text>
-    <TouchableOpacity style={styles.deleteButton}>
-      <Text style={styles.deleteButtonText}>Delete My Account</Text>
-    </TouchableOpacity>
-  </View>
-);
+const DeleteAccount = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const { mutateAsync: deleteUseraccount, isPending } = useMutation({
+    mutationFn: deleteUser,
+  });
+  const { logout } = useContext(AuthContext)
+  const { data, isLoading } = useQuery({
+    queryFn: CurrentUser,
+    queryKey: ['CURRENT_USER']
+  });
+  console.log(data, "CURRENTUSER DELETE")
+  const HandleDelete = async () => {
+    try {
+      const phrasehash = data?.data?.passphraseHash
+      const response = await deleteUseraccount({
+        passphraseHash: `delete ${phrasehash}`,
+      });
+      logout()
+      Toast.show({
+        type: 'success',
+        text1: 'Account Has Been deleted',
+      });
+    } catch (e) {
+      Toast.show({
+        type: 'error',
+        text1: 'Something went wrong with delete Account',
+      });
+    }
+  };
+  if (isLoading) {
+    return <CommonLoader />;
+  }
+  return (
+    <>
+      <View style={styles.infoContainer}>
+        <Text style={styles.text}>
+          Warning: This action cannot be undone. This will permanently delete your
+          account and remove your data from our servers.
+        </Text>
+        <TouchableOpacity style={styles.deleteButton} onPress={() => setModalVisible(!modalVisible)}>
+          <Text style={styles.deleteButtonText}>Delete My Account</Text>
+        </TouchableOpacity>
+      </View>
+      <Modal animationType="slide" transparent={true} visible={modalVisible}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}> {t('Account.assureDelete')}</Text>
+
+            <View style={styles.flexbtn}>
+              <TouchableOpacity style={styles.nobtn} onPress={() => setModalVisible(!modalVisible)}>
+                <Text style={styles.nobtntext}> {t('Account.cancel')}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.yesbtn}
+                onPress={() => HandleDelete()}
+
+              >
+                <Text style={styles.yesbtntext}> {isPending ? <ActivityIndicator /> : t('Account.confirm')} </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </>
+  );
+};
+
 
 // **Editable Profile Field Component**
 const ProfileField = ({label, value, onChange}: any) => {
@@ -248,8 +311,8 @@ const ProfileField = ({label, value, onChange}: any) => {
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round">
-            <Path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"></Path>
-            <Path d="M13.5 6.5l4 4"></Path>
+            <Path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+            <Path d="M13.5 6.5l4 4" />
           </Svg>
         </TouchableOpacity>
       </View>
@@ -269,6 +332,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap:10,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   Toptext: {
     // color: '#fff',
     // fontSize: 22,
@@ -280,7 +348,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 20,
     fontWeight: 700,
-    textAlign: "center",
+    textAlign: 'center',
     flex: 1,
     marginTop: Platform.OS == 'ios' ? 45 : 0,
   },
@@ -451,7 +519,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     width: responsiveWidth(20),
-    marginBottom:20
+    marginBottom: 20,
   },
   copyButtonText: {
     color: '#fff',
@@ -460,7 +528,7 @@ const styles = StyleSheet.create({
   hideSection: {
     marginTop: 30,
     paddingTop: 20,
-   
+
     flexDirection: 'column',
     alignItems: 'left',
   },
@@ -542,26 +610,111 @@ const styles = StyleSheet.create({
     color: '#D1D5DB',
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     height: 50,
     paddingHorizontal: 10,
-    marginBottom:20
+    marginBottom: 20,
   },
   backButton: {
     width: 50, // Ensures left alignment
-    justifyContent: "center",
-    alignItems: "flex-start",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "white",
-    textAlign: "center",
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
     flex: 1, // Centers the text
   },
   rightPlaceholder: {
     width: 50, // Keeps the right side empty
   },
+  modalView: {
+    margin: 20,
+    backgroundColor: '#1a1b1e',
+    borderRadius: 20,
+    padding: 25,
+    alignItems: 'center',
+    shadowColor: '#fff0db',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: '#fff0db',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    color: '#fff0db',
+    fontSize: 20,
+    fontWeight: 700,
+  },
+
+  modalText2: {
+    color: '#fff0db',
+    fontSize: 17,
+    marginTop: 10,
+    fontWeight: 600,
+    marginBottom: 20,
+  },
+  modalText3: {
+    color: '#fff0db',
+    fontSize: 17,
+    marginTop: 10,
+  },
+  modalText4: {
+    color: '#ff6b6b',
+    fontSize: 17,
+    marginTop: 10,
+    textAlign: 'center',
+  },
+  nobtn: {
+    backgroundColor: '#d9480f',
+    // borderRadius:"50%",
+    justifyContent: 'center',
+    borderRadius: 7,
+    width: responsiveWidth(20),
+    alignItems: 'center',
+  },
+  yesbtn: {
+    backgroundColor: '#fff0db',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    fontWeight: 'bold',
+    borderRadius: 7,
+    alignItems: 'center',
+    width: responsiveWidth(20),
+  },
+  flexbtn: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    columnGap: 20,
+    marginVertical: 10,
+  },
+  nobtntext: {
+    color: '#fff',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    fontWeight: 'bold',
+  },
+  yesbtntext: {},
 });

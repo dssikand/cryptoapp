@@ -230,6 +230,7 @@
       "countryLabel": "Select Your Country of Residence",
       "accountInfo": "Account Info",
       "recoveryPassword": "Recovery Password",
+      "assureDelete": "Are you sure you want to delete your account?",
       "recoveryPasswordDesc": "Use your recovery password to load your account on new devices.",
       "recoveryPasswordCopied": "Recovery password copied to clipboard",
       "recoveryPasswordHidden": "Recovery password hidden",

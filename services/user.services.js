@@ -22,72 +22,50 @@ export const SignUpUser = async params => {
 };
 export const ActiveUser = async params => {
   try {
-    const {data} = await Base_URL.get(
-      '/puzzle/active',
-      params,
-    );
+    const {data} = await Base_URL.get('/puzzle/active', params);
     return data;
   } catch (e) {
     return e.response;
   }
- 
 };
 export const CurrentUser = async params => {
-  
   try {
-    const {data} = await Base_URL.get(
-      '/user/me',
-      params,
-    );
+    const {data} = await Base_URL.get('/user/me', params);
     return data;
   } catch (e) {
     return e.response;
   }
 };
 export const SubmitCode = async params => {
-  
   try {
-    const {data} = await Base_URL.post(
-      '/user/me/mining-code',
-      params,
-    );
+    const {data} = await Base_URL.post('/user/me/mining-code', params);
     return data;
   } catch (e) {
     return e.response;
   }
 };
 export const LeaderBoard = async params => {
-  
   try {
-    const {data} = await Base_URL.get(
-      '/leaderboard',
-      params,
-    );
+    const {data} = await Base_URL.get('/leaderboard', params);
     return data;
   } catch (e) {
     return e.response;
   }
 };
 export const FetchAnnouncement = async params => {
-  
   try {
-    const {data} = await Base_URL.get(
-      '/announcement?page=1&limit=10',
-      params,
-    );
+    const {data} = await Base_URL.get('/announcement?page=1&limit=10', params);
     return data;
   } catch (e) {
     return e.response;
   }
 };
 export const UserRegister = async params => {
-  
   try {
     const {data} = await Base_URL.post(
       '/user/me/finalize-registration',
       params,
     );
-    console.log(data)
     return data;
   } catch (e) {
     return e.response;
@@ -95,10 +73,19 @@ export const UserRegister = async params => {
 };
 
 export const checkReferalCode = async params => {
-  try{
-    const {data} = await Base_URL.post("/user/check-referral-code", params);
-    return data
-  }catch(e){
-    return e.response
+  try {
+    const {data} = await Base_URL.post('/user/check-referral-code', params);
+    return data;
+  } catch (e) {
+    return e.response;
   }
-}
+};
+
+export const deleteUser = async params => {
+  try {
+    const {data} = await Base_URL.post('/user/me/update', params);
+    return data;
+  } catch (e) {
+    return e.response;
+  }
+};
