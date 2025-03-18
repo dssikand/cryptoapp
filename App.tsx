@@ -1,23 +1,19 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React, {useContext, useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import {View, Text, ActivityIndicator, BackHandler} from 'react-native';
+import { Platform, PermissionsAndroid } from 'react-native';
 import 'react-native-gesture-handler';
 import {
   Bell,
   Building2,
-  Group,
-  HomeIcon,
-  LucideHome,
   Pickaxe,
-  Settings,
-  User,
   Users,
   Wallet,
 } from 'lucide-react-native';
-
 // Import Screens
 import StartScreen from './components/startscreen';
 import SignInScreen from './components/signinscreen';
@@ -32,11 +28,62 @@ import CustomDrawer from './components/common/customdrawer';
 import ObjectiveScreen from './components/objectivescreen';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import Toast from 'react-native-toast-message';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import "./i18n"; // Import i18n config
+import './i18n'; // Import i18n config
 import { useTranslation } from 'react-i18next';
 import { AuthContext, AuthProvider } from './authcontext';
 import GroupScreen from './components/groupscreen';
+import messaging from "@react-native-firebase/messaging"
+import "./firebaseconfig"
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+// ✅ Function to Request Notification Permissions
+async function requestUserPermission() {
+  let authStatus = null;
+
+  if (Platform.OS === 'ios') {
+    authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('✅ iOS Notification permission granted.');
+      // await getFCMToken();
+    } else {
+      console.log('❌ iOS Notification permission denied.');
+    }
+  } else if (Platform.OS === 'android') {
+    if (Platform.Version >= 33) { // Android 13+
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('✅ Android notification permission granted.');
+        // await getFCMToken();
+      } else {
+        console.log('❌ Android notification permission denied.');
+      }
+    } else {
+      console.log('ℹ️ Android version does not require explicit notification permission.');
+      // await getFCMToken(); // Directly get FCM token for Android 12 and below
+    }
+  }
+}
+
+// ✅ Function to Get FCM Token
+async function getFCMToken() {
+  try {
+
+
+    const reso = await messaging().getToken()
+    await AsyncStorage.setItem("deviceToken", reso)
+  } catch (error) {
+    console.error('❌ Error getting FCM token:', error);
+  }
+}
+
 // import { setupFirebaseNotifications } from './firebaseService';
 // Create Navigators
 const Stack = createStackNavigator();
@@ -51,16 +98,16 @@ function BottomTabs() {
       screenOptions={({route}) => ({
         tabBarIcon: ({focused}) => {
           let iconName;
-         if (route.name === 'Wallet'|| route.name==="钱包") {
-            iconName = <Wallet color={focused ? "#ff922b" : "#adb5bd"} />;
-          } else if (route.name === 'Mining'|| route.name==="挖矿") {
-            iconName = <Pickaxe color={focused ? "#ff922b" : "#adb5bd"} />;
-          } else if (route.name === 'Leader Board'|| route.name==="排行榜") {
-            iconName = <Building2 color={focused ? "#ff922b" : "#adb5bd"} />;
-          } else if (route.name === 'Announcement'|| route.name==="公告") {
-            iconName = <Bell color={focused ? "#ff922b" : "#adb5bd"} />;
-          } else if (route.name === 'Group'|| route.name==="我的推荐组") {
-            iconName = <Users color={focused ? "#ff922b" : "#adb5bd"} />;
+          if (route.name === 'Wallet' || route.name === '钱包') {
+            iconName = <Wallet color={focused ? '#ff922b' : '#adb5bd'} />;
+          } else if (route.name === 'Mining' || route.name === '挖矿') {
+            iconName = <Pickaxe color={focused ? '#ff922b' : '#adb5bd'} />;
+          } else if (route.name === 'Leader Board' || route.name === '排行榜') {
+            iconName = <Building2 color={focused ? '#ff922b' : '#adb5bd'} />;
+          } else if (route.name === 'Announcement' || route.name === '公告') {
+            iconName = <Bell color={focused ? '#ff922b' : '#adb5bd'} />;
+          } else if (route.name === 'Group' || route.name === '我的推荐组') {
+            iconName = <Users color={focused ? '#ff922b' : '#adb5bd'} />;
           }
           return <Text>{iconName}</Text>;
         },
@@ -70,12 +117,12 @@ function BottomTabs() {
         headerShown: false,
       })}
     >
-      
-      <Tab.Screen name={t("Common.wallet")} component={WalletScreen} />
-      <Tab.Screen name={t("Common.mining")} component={MiningScreen} />
-      <Tab.Screen name={t("Common.leader")} component={LeaderboardScreen} />
-      <Tab.Screen name={t("Common.announcement")} component={AnnouncemntScreen} />
-      <Tab.Screen name={t("Common.group")} component={GroupScreen} />
+
+      <Tab.Screen name={t('Common.wallet')} component={WalletScreen} />
+      <Tab.Screen name={t('Common.mining')} component={MiningScreen} />
+      <Tab.Screen name={t('Common.leader')} component={LeaderboardScreen} />
+      <Tab.Screen name={t('Common.announcement')} component={AnnouncemntScreen} />
+      <Tab.Screen name={t('Common.group')} component={GroupScreen} />
     </Tab.Navigator>
   );
 }
@@ -127,6 +174,12 @@ function DrawerNavigator() {
 function Navigation() {
   const { isLoggedIn, isLoading } = useContext(AuthContext);
   useEffect(() => {
+
+
+    setTimeout(() => { requestUserPermission(); getFCMToken() }, 3000)
+    // init();
+  }, []);
+  useEffect(() => {
     const backAction = () => {
       if (isLoggedIn) {
         BackHandler.exitApp(); // Exit app if on main app screen
@@ -134,7 +187,7 @@ function Navigation() {
       }
       return false; // Allow default behavior for login/signup
     };
-
+    requestUserPermission()
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       backAction,
@@ -149,10 +202,10 @@ function Navigation() {
       </View>
     );
   }
-  console.log(isLoggedIn,"ISLOGGEDIN")
+
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false, cardStyle:{backgroundColor: "#000"} }}>
+      <Stack.Navigator screenOptions={{ headerShown: false, cardStyle: { backgroundColor: '#000' } }}>
         <Stack.Screen name="App" component={isLoggedIn ? DrawerNavigator : AuthStack} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -162,7 +215,7 @@ function Navigation() {
 export default function App() {
 
 
-  
+
   return (
     <AuthProvider>
     <QueryClientProvider client={queryClient}>

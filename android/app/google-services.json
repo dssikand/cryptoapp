@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "574415947557",
-    "project_id": "qoyn-app",
-    "storage_bucket": "qoyn-app.firebasestorage.app"
+    "project_number": "100966928687",
+    "project_id": "qouyapp",
+    "storage_bucket": "qouyapp.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:574415947557:android:ab527f2d91f0915c867ccc",
+        "mobilesdk_app_id": "1:100966928687:android:4db2b618e969e1f761d1da",
         "android_client_info": {
           "package_name": "com.qouyapp"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDiIKn_zFdqk4gzuHU_peedC5k3EJT72CY"
+          "current_key": "AIzaSyD584XDlWSzTj2uNZZiJuJqOhuo4rhdwKU"
         }
       ],
       "services": {
