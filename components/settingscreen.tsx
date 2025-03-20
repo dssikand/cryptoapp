@@ -182,29 +182,6 @@ const RecoveryPassword = ({phrase}) => {
           <Text style={styles.hideButtonText}>Hide</Text>
         </TouchableOpacity>
       </View>
-      {/* <Modal animationType="slide" transparent={true} visible={modalVisible}>
-      <View style={styles.container}>
-      <Text style={styles.title}>Hide Recovery Password Permanently</Text>
-      <Text style={styles.description}>
-        Without your recovery password, you cannot load your account on new devices.
-      </Text>
-      <Text style={styles.description}>
-        We strongly recommend you save your recovery password in a safe and secure place before continuing.
-      </Text>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.continueButton} onPress={onContinue}>
-          <Text style={styles.continueText}>Continue</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-          <Text style={styles.cancelText}>Cancel</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-            </Modal> */}
-
-      {/* <RecoveryModal visible={undefined} onContinue={undefined} onCancel={() => setModalVisible(false)}/> */}
     </>
   );
 };
@@ -269,7 +246,7 @@ const DeleteAccount = () => {
                 onPress={() => HandleDelete()}
 
               >
-                <Text style={styles.yesbtntext}> {isPending ? <ActivityIndicator /> : t('Account.confirm')} </Text>
+                <Text style={styles.yesbtntext}> {isPending ? <ActivityIndicator /> : <Text>{t('Account.confirm')}</Text>} </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -621,6 +598,7 @@ const styles = StyleSheet.create({
     width: 50, // Ensures left alignment
     justifyContent: 'center',
     alignItems: 'flex-start',
+    marginTop: Platform.OS == "ios" ? 10 : 0
   },
   headerTitle: {
     fontSize: 18,
