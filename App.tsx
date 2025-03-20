@@ -6,6 +6,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import {View, Text, ActivityIndicator, BackHandler} from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
+import notifee from '@notifee/react-native';
 import 'react-native-gesture-handler';
 import {
   Bell,
@@ -78,12 +79,24 @@ async function getFCMToken() {
 
 
     const reso = await messaging().getToken()
+    console.log(reso)
     await AsyncStorage.setItem("deviceToken", reso)
   } catch (error) {
     console.error('❌ Error getting FCM token:', error);
   }
 }
-
+// Function to Handle Incoming Notifications
+async function onDisplayNotification(remoteMessage) {
+  await notifee.requestPermission();
+  await notifee.displayNotification({
+    title: remoteMessage.notification?.title,
+    body: remoteMessage.notification?.body,
+    android: {
+      channelId: 'default',
+      smallIcon: 'ic_launcher', // Ensure you have this icon in Android
+    },
+  });
+}
 // import { setupFirebaseNotifications } from './firebaseService';
 // Create Navigators
 const Stack = createStackNavigator();
@@ -192,8 +205,18 @@ function Navigation() {
       'hardwareBackPress',
       backAction,
     );
+
     return () => backHandler.remove();
   }, [isLoggedIn]);
+  useEffect(() => {
+    async function notifeeHandling() {
+      const unsubscribe = messaging().onMessage(async remoteMessage => {
+        await onDisplayNotification(remoteMessage);
+      });
+      return unsubscribe;
+    }
+    notifeeHandling()
+  }, [])
   // ✅ Show loading indicator while checking auth state
   if (isLoading) {
     return (
