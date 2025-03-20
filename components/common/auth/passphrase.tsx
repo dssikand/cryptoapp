@@ -112,6 +112,7 @@ export default function PassphraseGenerator({
           console.log(passphrase.join(''))
           const phrase = passphrase.join('');
           const deviceTOken = await AsyncStorage.getItem("deviceToken")
+          console.log({ phrases: phrase, type: 'register', deviceToken: deviceTOken })
           const response = await siginUser({ phrases: phrase, type: 'register', deviceToken: deviceTOken });
           console.log(response);
           if (response.success) {
