@@ -78,6 +78,7 @@ async function getFCMToken() {
 
 
     const reso = await messaging().getToken()
+    console.log(reso)
     await AsyncStorage.setItem("deviceToken", reso)
   } catch (error) {
     console.error('❌ Error getting FCM token:', error);
