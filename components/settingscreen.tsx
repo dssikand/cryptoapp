@@ -202,7 +202,7 @@ const DeleteAccount = () => {
     try {
       const phrasehash = data?.data?.passphraseHash
       const response = await deleteUseraccount({
-        passphraseHash: `delete ${phrasehash}`,
+        passphraseHash: "delete" + phrasehash,
       });
       logout()
       Toast.show({

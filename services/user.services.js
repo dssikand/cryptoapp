@@ -83,7 +83,7 @@ export const checkReferalCode = async params => {
 
 export const deleteUser = async params => {
   try {
-    const {data} = await Base_URL.post('/user/me/update', params);
+    const {data} = await Base_URL.post('/user/me/update', {user:params});
     return data;
   } catch (e) {
     return e.response;

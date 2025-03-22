@@ -26,16 +26,20 @@ const SignUpScreen = ({
       {isSignUpLoading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
-        <Text style={styles.text}>
-         {t("Auth.alreadyHaveAccount")}
-          <TouchableOpacity
-            // onPress={() => {
-            //   navigation.navigate("SignIn", { step: "passphrase" }); // Assuming "SignIn" is the name of your sign-in screen
-            // }}
-          >
-            <Text style={styles.link}>  {t("Auth.signInWithPassphrase")}</Text>
-          </TouchableOpacity>
-        </Text>
+        // <Text style={styles.text}>
+        //  {t("Auth.alreadyHaveAccount")}
+        //   <TouchableOpacity
+        //     // onPress={() => {
+        //     //   navigation.navigate("SignIn", { step: "passphrase" }); // Assuming "SignIn" is the name of your sign-in screen
+        //     // }}
+        //   >
+        //     <Text style={styles.link}>  {t("Auth.signInWithPassphrase")}</Text>
+        //   </TouchableOpacity>
+        // </Text>
+                <TouchableOpacity onPress={() => navigation.navigate("App", { screen: "SignIn" })} style={styles.linkContainer}>
+                <Text style={styles.text2}>{t("Auth.alreadyHaveAccount")} </Text>
+                <Text style={styles.linkText}>{t("Auth.passphraseSignIn")}</Text>
+              </TouchableOpacity>
       )}
     </View>
   );
@@ -48,9 +52,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
 
   },
+  linkContainer: {
+    flexDirection: "row",
+    marginVertical: 10,
+    justifyContent:'center'
+  },
+  linkText: {
+    fontSize: 16,
+    color: "#007BFF",
+    fontWeight: "bold",
+    borderBottomWidth: 1,
+    borderBottomColor: "#007BFF"
+  },
   text: {
     textAlign: "center",
     color: "#333",
+  },
+  text2: {
+    fontSize: 16,
+    color: "#555",
   },
   link: {
     color: "#1e90ff", // Blue color for the link

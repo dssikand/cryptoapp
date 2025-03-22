@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef,useState } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Animated,
   FlatList,
   Platform,
+  RefreshControl
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -20,6 +21,7 @@ import { useQuery } from '@tanstack/react-query';
 import {  LeaderBoard } from '../services/user.services';
 import CommonLoader from './common/commonloader';
 import { CurrentUser } from '../services/user.services';
+import { Feather } from 'lucide-react-native';
 const leaderboardData = [
   { id: '1', rank: 1, referralCode: 'REF12345', coins: '25.20' },
   { id: '2', rank: 2, referralCode: 'REF67890', coins: '18.75' },
@@ -31,14 +33,28 @@ const leaderboardData = [
 ];
 
 const GroupScreen = () => {
+  const [refreshing, setRefreshing] = useState(false);
+  const total = (totalvalue) => {
+    const total = totalvalue.referralBonus + totalvalue.referralsMiningCodeSum + totalvalue.userMiningCodeSum
+    return total
+  }
+  const onRefresh = () => {
+    setRefreshing(true);
+    Animated.timing(pullAnim, { toValue: 0, duration: 200, useNativeDriver: true }).start(); // Reset animation
+    setTimeout(() => {
+      setRefreshing(false); // Simulate an API call
+    }, 1000);
+  };
+
   const animations = useRef(
     leaderboardData.map(() => new Animated.Value(0)),
   ).current;
   const {data, isLoading} = useQuery({
     queryFn: CurrentUser,
     queryKey: ['CURRENT_USER'],
+    enabled: !refreshing
   });
-
+  const pullAnim = useRef(new Animated.Value(0)).current; // Track pull distance
   console.log(data);
   useEffect(() => {
     animations.forEach((anim, index) => {
@@ -52,6 +68,7 @@ const GroupScreen = () => {
   }, []);
 
   const renderItem = ({item, index}) => {
+    console.log(index)
     return (
       <Animated.View
         style={[
@@ -103,7 +120,7 @@ const GroupScreen = () => {
                     <Text style={styles.rankText}>{t('LeaderBoard.rank')}</Text>
                     <View
                       style={{
-                        padding: 10,
+                        padding: responsiveWidth(13),
                       }}>
                       <LinearGradient
                         colors={['#F06400', '#FFBF6E']}
@@ -117,14 +134,14 @@ const GroupScreen = () => {
                 <View style={styles.userContainer}>
                   <Text style={styles.username}>{t('LeaderBoard.referralCode')}</Text>
 
-                  <Text style={styles.coins}>{item.name}</Text>
+                  <Text style={styles.coins}>{item?.referralId?.referralCode}</Text>
                 </View>
                 <View style={styles.userContainer}>
                   <Text style={styles.username}>
                     {t('LeaderBoard.totalCoins')}
                   </Text>
                   <Text style={styles.coins}>
-                    {item.total}
+                    {total(item?.referralId?.totalValue)}
                     <Text style={styles.coinsDecimal}>.00</Text>
                   </Text>
                 </View>
@@ -149,14 +166,32 @@ const GroupScreen = () => {
 
         {/* Ensuring Full-Height View for FlatList */}
         <View style={styles.bg}>
+        {/* <Animated.View
+        style={[
+          styles.iconContainer,
+          { transform: [{ translateY: pullAnim }] }, // Move icon with pull
+        ]}
+      >
+        <Feather name="chevron-down" size={30} color="white" />
+      </Animated.View> */}
           <FlatList
             data={data.data.referrals}
             keyExtractor={item => item.id}
             renderItem={renderItem}
             showsVerticalScrollIndicator={true} // Enable vertical scrolling indicator
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['black']} 
+              tintColor="black"  />
+            }
+            onScroll={(event) => {
+              const pullDistance = event.nativeEvent.contentOffset.y;
+              if (pullDistance < 0) {
+                pullAnim.setValue(Math.abs(pullDistance)); // Move icon down
+              }
+            }}
             ListEmptyComponent={
                           <View style={styles.emptyContainer}>
-                            <Text style={styles.emptyText}>No Data Available</Text>
+                            <Text style={styles.emptyText}>Your group is currently empty. Invite your friends by sharing your referral code to grow the community and unlock more rewards!</Text>
                           </View>
                         }
           />
@@ -176,10 +211,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
+    height: responsiveHeight(50)
   },
   emptyText: {
     fontSize: 18,
     color: 'white',
+    textAlign:'center'
   },
   Toptext: {
     color: '#fff',

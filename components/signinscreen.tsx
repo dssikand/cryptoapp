@@ -80,11 +80,11 @@ export default function SignInPassphraseStep({
           placeholder="Passphrase"
           placeholderTextColor={'#fff'}
           value={text}
-          onChangeText={newText => setText(newText)}
+          onChangeText={newText => setText(newText.split(",").join(" "))}
         />
 
         <TouchableOpacity
-          style={[styles.button, !value && styles.buttonDisabled]}
+          style={[styles.button]}
           onPress={HandleLogin}
           disabled={text.trim().length == 0}>
           {isPending ? (
@@ -95,7 +95,7 @@ export default function SignInPassphraseStep({
         </TouchableOpacity>
       </View>
         
-        <TouchableOpacity onPress={() => navigation.navigate("SignUpScreen")} style={styles.linkContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate("App", { screen: "SignUp" })} style={styles.linkContainer}>
         <Text style={styles.text}>{t("Auth.newUser?")} </Text>
         <Text style={styles.linkText}>{t("Auth.createYourQoynAccount")}</Text>
       </TouchableOpacity>
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: "100%",
-    backgroundColor: "#007BFF",
+    backgroundColor: "#d9480f",
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: "center",
@@ -178,5 +178,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#007BFF",
     fontWeight: "bold",
+    borderBottomWidth: 1,
+    borderBottomColor: "#007BFF"
   },
 });

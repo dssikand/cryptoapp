@@ -15,6 +15,7 @@ import {
   Linking,
   Alert,
   Clipboard,
+  ActivityIndicator,
 } from 'react-native';
 import Svg, {Path} from 'react-native-svg';
 import LinearGradient from 'react-native-linear-gradient';
@@ -241,9 +242,9 @@ const ObjectiveScreen = () => {
                 </View>
 
                 {/* Task Description */}
-                <Text style={styles.description}>
+                {/* <Text style={styles.description}>
                   {t('MiningSession.yourTask')} 🚀
-                </Text>
+                </Text> */}
 
                 {/* Reward Section */}
                 <View style={styles.rewardContainer}>
@@ -254,9 +255,9 @@ const ObjectiveScreen = () => {
 
                 {/* Footer */}
                 <View style={styles.footer}>
-                  <Text style={styles.footerText}>
+                  {/* <Text style={styles.footerText}>
                     {t('MiningSession.goodLuck')}
-                  </Text>
+                  </Text> */}
                   <Text style={styles.helpText}>
                     {t('MiningSession.needHelp')}
                     <Text
@@ -291,7 +292,7 @@ const ObjectiveScreen = () => {
                 // onPress={() => navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Mining"}}})}
                 onPress={CodeSubmit}>
                 <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 16}}>
-                  {t('MiningSession.submit')}
+                  {isPending ? <ActivityIndicator /> :t('MiningSession.submit')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -513,7 +514,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   submitbtn: {
-    backgroundColor: '#36383b',
+    backgroundColor: '#d9480f',
     padding: 12,
     borderRadius: 8,
     marginTop: 16,
@@ -550,10 +551,12 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: '600',
     color: '#fff',
+    fontSize:16
   },
   value: {
     fontWeight: '600',
     color: '#ff922b',
+    fontSize: 18
   },
   text2:{
     color: '#ff922b',
@@ -567,7 +570,7 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   copyText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#FFA500',
   },

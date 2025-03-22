@@ -84,6 +84,7 @@
       "login": "Login",
       "signUp": "Sign up",
       "logout": "Logout",
+      "support":"Support",
       "googleSignIn": "Sign in with Google",
       "facebookSignIn": "Sign in with Facebook",
       "appleSignIn": "Sign in with Apple",
@@ -109,7 +110,7 @@
       "platinum": "Platinum",
       "gold": "Gold",
       "silver": "Silver",
-      "bronze": "Bronze"
+      "bronze": "Bronze",
     },
     "Auth": {
       "signIn": "Sign In",

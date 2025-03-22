@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform, Linking } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
-import { Bell, Building2, Pickaxe, Wallet, Settings, ChevronDown, ChevronUp } from 'lucide-react-native';
+import { Bell, Building2, Pickaxe, Wallet, Settings, ChevronDown, ChevronUp, Link2Icon, TargetIcon, SquareArrowOutUpLeft, SquareArrowOutUpRight } from 'lucide-react-native';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useNavigation } from '@react-navigation/native';
@@ -18,6 +18,18 @@ const CustomDrawer = (props) => {
   const [value, setValue] = useState(null);
   const navigation = useNavigation();
   const {logout} = useContext(AuthContext)
+  const sendEmail = (email) => {
+    // const email = 'example@email.com'; // Replace with recipient email
+    const subject = 'Hello!'; // Replace with your subject
+    const body = 'I wanted to reach out to you.'; // Replace with your message
+  
+    const emailUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  
+    Linking.openURL(emailUrl).catch(err => console.error('Error opening email app:', err));
+  };
+  const Openurl = (url) => {
+    Linking.openURL(url).catch(err => console.error('Error opening email app:', err));
+  }
   return (
     <DrawerContentScrollView
       {...props}
@@ -83,14 +95,15 @@ const CustomDrawer = (props) => {
           <Settings color={'#fff'} />
           <Text style={styles.menuText}>{t('Common.Account')}</Text>
         </TouchableOpacity>
-        
+       
         <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
           <Text style={[styles.menuText, {color: '#fff'}]}>
             {t('Common.logout')}
           </Text>
         </TouchableOpacity>
+       
       </View>
-
+     
       {/* Move Dropdown & Logout Button to Bottom */}
       <View style={styles.bottomSection}>
         <DropDownPicker
@@ -120,6 +133,47 @@ const CustomDrawer = (props) => {
           onChangeValue={value => i18n.changeLanguage(value)}
         />
       </View>
+      {Platform.OS == "android" && <View style={styles.bottomSection2}> <TouchableOpacity
+          style={styles.menuIte2}
+          onPress={() =>
+           Openurl("https://www.qoyn.network/en/terms-and-condition")
+          }>
+          <Text style={styles.menuText2}>{t('Common.terms')}</Text>
+          <SquareArrowOutUpRight color={'#fff'} size={12} style={{paddingHorizontal: 10}}/>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuIte2}
+          onPress={() =>
+           Openurl("https://www.qoyn.network/en/whitepaper")
+          }>
+          <Text style={styles.menuText2}>{t('Common.whitepaper')}</Text>
+          <SquareArrowOutUpRight color={'#fff'} size={12} style={{paddingHorizontal: 10}}/>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuIte2}
+          onPress={() =>
+            Openurl("https://www.qoyn.network/en/privacy-policy")
+          }>
+          <Text style={styles.menuText2}>{t('Common.privacy-policy')}</Text>
+          <SquareArrowOutUpRight color={'#fff'} size={12} style={{paddingHorizontal: 10}}/>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuIte2}
+          onPress={() =>
+            Openurl("https://www.qoyn.network/en/faq")
+          }>
+          <Text style={styles.menuText2}>{t('Common.faq')}</Text>
+          <SquareArrowOutUpRight color={'#fff'} size={12} style={{paddingHorizontal: 10}}/>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuIte2}
+          onPress={() =>
+            sendEmail("example@gmail.com")
+          }>
+          <Text style={styles.menuText2}>{t('Common.support')}</Text>
+          <SquareArrowOutUpRight color={'#fff'} size={12} style={{paddingHorizontal: 10}}/>
+        </TouchableOpacity>
+        </View> }
     </DrawerContentScrollView>
   );
 };
@@ -138,15 +192,38 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 20,
   },
+  menuIte2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    // width: responsiveWidth(28),
+    
+  },
   menuText: {
     color: 'white',
     fontSize: 16,
     marginLeft: 15,
   },
+  menuText2: {
+    color: 'white',
+    fontSize: 11,
+    marginLeft: 15,
+  },
   bottomSection: {
     flex: 1,
     justifyContent: "flex-end",
-    paddingBottom: 70,
+    paddingBottom: 20,
+  },
+  bottomSection2: {
+    flex: 1,
+    // flexDirection: "row",
+    flexWrap:"wrap",
+    // justifyContent: "space-between",
+    // alignItems:"center",
+    // width: responsiveWidth(68),
+    // paddingHorizontal:0
+    // paddingBottom: 70,
   },
   logoutButton: {
     borderColor: "#d9480f",
@@ -157,6 +234,7 @@ const styles = StyleSheet.create({
     width: responsiveWidth(42),
     alignItems: "center",
     marginTop: 20,
+    marginHorizontal: 20
   },
   dropdownContainer: {
     width: responsiveWidth(40),

@@ -6,7 +6,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import {View, Text, ActivityIndicator, BackHandler} from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
-import notifee from '@notifee/react-native';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 import 'react-native-gesture-handler';
 import {
   Bell,
@@ -88,6 +88,14 @@ async function getFCMToken() {
 // Function to Handle Incoming Notifications
 async function onDisplayNotification(remoteMessage) {
   await notifee.requestPermission();
+ 
+// 🔥 Create a notification channel (fixes "No Channel found" error)
+const channelId = await notifee.createChannel({
+id: 'default', // Ensure this matches channelId in the error
+name: 'Default Notification Channel',
+importance: AndroidImportance.HIGH,
+description: 'Used for general notifications',
+});
   await notifee.displayNotification({
     title: remoteMessage.notification?.title,
     body: remoteMessage.notification?.body,
@@ -126,8 +134,11 @@ function BottomTabs() {
         },
         tabBarActiveTintColor: '#ff922b',
         tabBarInactiveTintColor: 'gray',
-        tabBarStyle: {backgroundColor: '#1a1b1e', paddingBottom: 5},
+        tabBarStyle: {backgroundColor: '#000', paddingBottom: 5},
         headerShown: false,
+        sceneStyle:{
+          backgroundColor:"#000"
+        }
       })}
     >
 
@@ -156,7 +167,7 @@ function AuthStack() {
 // ✅ Main Stack (Includes Bottom Tabs Inside a Stack)
 function MainStack() {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: false,cardStyle: { backgroundColor: '#000' } }}>
       <Stack.Screen name="MainTabs" component={BottomTabs} />
       <Stack.Screen name="Objective" component={ObjectiveScreen} />
       <Stack.Screen name="Account" component={SettingScreen} />
@@ -176,6 +187,7 @@ function DrawerNavigator() {
           width: 250,
         },
         headerShown: false, // Hide header
+        
       }}>
       <Drawer.Screen name="Home" component={MainStack} />
       <Drawer.Screen name="Objective" component={ObjectiveScreen} />
@@ -209,14 +221,19 @@ function Navigation() {
     return () => backHandler.remove();
   }, [isLoggedIn]);
   useEffect(() => {
-    async function notifeeHandling() {
-      const unsubscribe = messaging().onMessage(async remoteMessage => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log("Foreground notification received:", remoteMessage);
+  
+      try {
+        // Ensure the notification shows in notification bar
         await onDisplayNotification(remoteMessage);
-      });
-      return unsubscribe;
-    }
-    notifeeHandling()
-  }, [])
+      } catch (error) {
+        console.error("Error handling foreground notification:", error);
+      }
+    });
+  
+    return unsubscribe;
+  }, []);
   // ✅ Show loading indicator while checking auth state
   if (isLoading) {
     return (

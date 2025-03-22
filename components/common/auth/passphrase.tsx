@@ -198,13 +198,14 @@ export default function PassphraseGenerator({
         <TouchableOpacity
           style={styles.copyButton}
           onPress={async () => {
-            copyToClipboard(passphrase.join())
+            copyToClipboard(passphrase.join(" "))
             await AsyncStorage.setItem("passphrase",passphrase.join(' '))
           }}>
               <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
         <Text style={styles.copyText}>
           {t("Auth.passphraseGenerator.copyAllWords")}
         </Text>
+        
         <Copy size={20} color="white" />
       </View>
         </TouchableOpacity>

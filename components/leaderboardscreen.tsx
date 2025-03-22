@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Animated,
   FlatList,
   Platform,
+  RefreshControl
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -31,14 +32,23 @@ const leaderboardData = [
 ];
 
 const LeaderboardScreen = () => {
+  const [refreshing, setRefreshing] = useState(false);
+  
   const animations = useRef(
     leaderboardData.map(() => new Animated.Value(0)),
   ).current;
   const {data, isLoading} = useQuery({
     queryFn: LeaderBoard,
     queryKey: ['LEADER_BOARD'],
+    enabled: !refreshing
   });
-
+  
+    const onRefresh = () => {
+      setRefreshing(true);
+      setTimeout(() => {
+        setRefreshing(false); // Simulate an API call
+      }, 1000);
+    };
   console.log(data);
   useEffect(() => {
     animations.forEach((anim, index) => {
@@ -152,6 +162,10 @@ const LeaderboardScreen = () => {
             data={data.data}
             keyExtractor={item => item.id}
             renderItem={renderItem}
+            refreshControl={
+                          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['black']} 
+                          tintColor="black"  />
+                        }
             showsVerticalScrollIndicator={true} 
             // Enable vertical scrolling indicator
             
