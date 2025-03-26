@@ -117,14 +117,14 @@ const RecoveryPassword = ({phrase}) => {
       setIsHidden(true); // Hide the passphrase in UI
       Toast.show({
         type: 'success',
-        text1: 'Recovery Password Hidden',
+        text1: 'Phrase Hidden',
         position: 'top',
       });
     } catch (error) {
       console.error('Error hiding passphrase:', error);
       Toast.show({
         type: 'error',
-        text1: 'Failed to hide recovery password',
+        text1: 'Failed To Hide Phrase',
         position: 'top',
       });
     }
@@ -133,7 +133,7 @@ const RecoveryPassword = ({phrase}) => {
     Clipboard.setString(text);
     Toast.show({
       type: 'success',
-      text1: 'Recovery Password copied',
+      text1: 'Phrase Copied',
       position: 'top',
     });
   };

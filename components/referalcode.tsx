@@ -67,7 +67,7 @@ export default function ReferalCode({
                 if (response.success) {
                   Toast.show({
                     type: 'success',
-                    text1: 'Login Successfully',
+                    text1: 'Welcome to Qoyn',
                   });3
                   navigation.navigate("App",{screen:"Home",params:{screen:"MainTabs",params:{screen:"Wallet"}}})
                   login(token)
@@ -122,11 +122,11 @@ export default function ReferalCode({
 
         <Text style={styles.title}>{t("Common.referralCode")}</Text>
         <Text style={styles.description}>
-        {t("Account.enterReferralCode.intro1")}<Text style={styles.highlight}>{t("Account.enterReferralCode.intro2")}</Text> {t("Account.enterReferralCode.intro3")}.
+          {t("Account.enterReferralCode.intro1")}<Text style={styles.highlight}> {t("Account.enterReferralCode.intro2")}</Text> {t("Account.enterReferralCode.intro3")}.
         </Text>
         <Text style={styles.description}>
         {t("Account.signUpByReferral.intro1")}
-          <Text style={styles.highlight}>{t("Account.signUpByReferral.intro2")}</Text>.
+          <Text style={styles.highlight}> {t("Account.signUpByReferral.intro2")}</Text>.
         </Text>
 
         <View style={styles.inputContainer}>
@@ -248,13 +248,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
-    textAlign: 'center',
+    // textAlign: 'center',
     marginVertical: 10,
   },
   description: {
     fontSize: 16,
     color: 'white',
-    textAlign: 'center',
+    // textAlign: 'center',
     fontStyle: 'italic',
     marginBottom: 10,
   },

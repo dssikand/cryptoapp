@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform, Linking, Alert } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { Bell, Building2, Pickaxe, Wallet, Settings, ChevronDown, ChevronUp, Link2Icon, TargetIcon, SquareArrowOutUpLeft, SquareArrowOutUpRight } from 'lucide-react-native';
 import { responsiveWidth } from 'react-native-responsive-dimensions';
@@ -25,10 +25,11 @@ const CustomDrawer = (props) => {
   
     const emailUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   
-    Linking.openURL(emailUrl).catch(err => console.error('Error opening email app:', err));
+
+    Linking.openURL(emailUrl).catch((err) => Alert.alert("Email app is not Configured"));
   };
   const Openurl = (url) => {
-    Linking.openURL(url).catch(err => console.error('Error opening email app:', err));
+    Linking.openURL(url).catch(err => console.error('Error opening url:', err));
   }
   return (
     <DrawerContentScrollView
@@ -133,21 +134,21 @@ const CustomDrawer = (props) => {
           onChangeValue={value => i18n.changeLanguage(value)}
         />
       </View>
-      {Platform.OS == "android" && <View style={styles.bottomSection2}> <TouchableOpacity
-          style={styles.menuIte2}
-          onPress={() =>
-           Openurl("https://www.qoyn.network/en/terms-and-condition")
-          }>
-          <Text style={styles.menuText2}>{t('Common.terms')}</Text>
-          <SquareArrowOutUpRight color={'#fff'} size={12} style={{paddingHorizontal: 10}}/>
-        </TouchableOpacity>
+      {Platform.OS == "ios" && <View style={styles.bottomSection2}> <TouchableOpacity
+        style={styles.menuIte2}
+        onPress={() =>
+          Openurl("https://www.qoyn.network/en/whitepaper")
+        }>
+        <Text style={styles.menuText2}>{t('Common.whitepaper')}</Text>
+        <SquareArrowOutUpRight color={'#fff'} size={12} style={{ paddingHorizontal: 10 }} />
+      </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuIte2}
           onPress={() =>
-           Openurl("https://www.qoyn.network/en/whitepaper")
+            Openurl("https://www.qoyn.network/en/faq")
           }>
-          <Text style={styles.menuText2}>{t('Common.whitepaper')}</Text>
-          <SquareArrowOutUpRight color={'#fff'} size={12} style={{paddingHorizontal: 10}}/>
+          <Text style={styles.menuText2}>{t('Common.faq')}</Text>
+          <SquareArrowOutUpRight color={'#fff'} size={12} style={{ paddingHorizontal: 10 }} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuIte2}
@@ -155,23 +156,29 @@ const CustomDrawer = (props) => {
             Openurl("https://www.qoyn.network/en/privacy-policy")
           }>
           <Text style={styles.menuText2}>{t('Common.privacy-policy')}</Text>
-          <SquareArrowOutUpRight color={'#fff'} size={12} style={{paddingHorizontal: 10}}/>
+          <SquareArrowOutUpRight color={'#fff'} size={12} style={{ paddingHorizontal: 10 }} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuIte2}
           onPress={() =>
-            Openurl("https://www.qoyn.network/en/faq")
+            Openurl("https://www.qoyn.network/en/terms-and-condition")
           }>
-          <Text style={styles.menuText2}>{t('Common.faq')}</Text>
+
+          <Text style={styles.menuText2}>{t('Common.terms')}</Text>
           <SquareArrowOutUpRight color={'#fff'} size={12} style={{paddingHorizontal: 10}}/>
         </TouchableOpacity>
+
+
+
         <TouchableOpacity
           style={styles.menuIte2}
           onPress={() =>
-            sendEmail("example@gmail.com")
+            navigation.navigate('App', {
+              screen: 'Home',
+              params: { screen: 'Support' },
+            })
           }>
           <Text style={styles.menuText2}>{t('Common.support')}</Text>
-          <SquareArrowOutUpRight color={'#fff'} size={12} style={{paddingHorizontal: 10}}/>
         </TouchableOpacity>
         </View> }
     </DrawerContentScrollView>

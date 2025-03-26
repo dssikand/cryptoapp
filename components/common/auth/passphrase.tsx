@@ -57,7 +57,7 @@ export default function PassphraseGenerator({
     Clipboard.setString(text);
     Toast.show({
       type:"success",
-      text1:"Phrase password copied",
+      text1:"Phrase Copied",
       position:"top"
     });
   };

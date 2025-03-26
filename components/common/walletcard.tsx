@@ -81,7 +81,7 @@ export function WalletCard({refrealCode, totalValue}) {
                 {refrealCode}
                 <TouchableOpacity
                   onPress={() =>
-                    copyToClipboard(refrealCode, 'Referral Code Copied')
+                    copyToClipboard(refrealCode, 'Code Copied')
                   }>
                   <Copy color={'white'} size={19} style={styles.copyico}/>
                 </TouchableOpacity>

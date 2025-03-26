@@ -16,6 +16,10 @@ import {
   Alert,
   Clipboard,
   ActivityIndicator,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import Svg, {Path} from 'react-native-svg';
 import LinearGradient from 'react-native-linear-gradient';
@@ -66,7 +70,7 @@ const ObjectiveScreen = () => {
         if (response.success) {
           Toast.show({
             type: 'success',
-            text1: 'Login Successfully',
+            text1: 'Mining Complete!',
           });
           3;
           navigation.navigate('App', {
@@ -133,6 +137,12 @@ const ObjectiveScreen = () => {
     return <CommonLoader />;
   }
   return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0} // Adjust if you have a header
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <ImageBackground
       source={require('../assets/img/crypt.jpeg')} // Change to your image path
       style={styles.background}
@@ -208,7 +218,7 @@ const ObjectiveScreen = () => {
                         onPress={() =>
                           copyToClipboard(
                             data.data.referralCode,
-                            'Prefix Code Copied',
+                            'Prefix Copied',
                           )
                         }>
                         <Copy color={'white'} />
@@ -300,6 +310,8 @@ const ObjectiveScreen = () => {
         </View>
       </View>
     </ImageBackground>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -615,6 +627,7 @@ const styles = StyleSheet.create({
     width: 50, // Ensures left alignment
     justifyContent: "center",
     alignItems: "flex-start",
+    marginTop: 10
   },
   headerTitle: {
     fontSize: 18,

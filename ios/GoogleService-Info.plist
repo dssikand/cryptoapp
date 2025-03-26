@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.qouyapp</string>
+	<string>com.qoynnetwork.qouyapp</string>
 	<key>PROJECT_ID</key>
 	<string>qouyapp</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:100966928687:ios:c070b399e26647cc61d1da</string>
+	<string>1:100966928687:ios:94cf578e0855117e61d1da</string>
 </dict>
 </plist>

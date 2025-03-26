@@ -36,6 +36,7 @@ import GroupScreen from './components/groupscreen';
 import messaging from "@react-native-firebase/messaging"
 import "./firebaseconfig"
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SupportScreen from './components/supportscreen';
 
 
 // ✅ Function to Request Notification Permissions
@@ -171,6 +172,7 @@ function MainStack() {
       <Stack.Screen name="MainTabs" component={BottomTabs} />
       <Stack.Screen name="Objective" component={ObjectiveScreen} />
       <Stack.Screen name="Account" component={SettingScreen} />
+      <Stack.Screen name="Support" component={SupportScreen} />
 
     </Stack.Navigator>
   );
