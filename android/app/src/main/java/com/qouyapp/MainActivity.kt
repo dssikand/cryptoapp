@@ -6,7 +6,7 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnable
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 import android.os.Bundle
 import com.google.firebase.FirebaseApp
-
+import org.devio.rn.splashscreen.SplashScreen
 class MainActivity : ReactActivity() {
 
     /**
@@ -23,6 +23,7 @@ class MainActivity : ReactActivity() {
         DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        SplashScreen.show(this) // Show splash screen
         super.onCreate(savedInstanceState)
 
         // Initialize Firebase manually
